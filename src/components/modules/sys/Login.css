@@ -1,0 +1,12 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.field{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
