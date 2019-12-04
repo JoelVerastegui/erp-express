@@ -1,10 +1,11 @@
 import React from 'react';
 
 function Article(props){
-    let width = props.width !== undefined ? props.width : '';
+    let _class = props.class !== undefined ? props.class : "d-flex flex-wrap justify-content-between";
+    let width = props.width !== undefined ? props.width : '100%';
 
     return(
-        <article className="d-flex flex-wrap justify-content-between" style={{width:width}}>
+        <article className={_class} style={{width:width}}>
             {props.children}
         </article>
     )
