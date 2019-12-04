@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import Field from '../../../../reusables/Field';
 import Article from '../../../../reusables/Article';
+import DropDown from '../../../../reusables/DropDown';
 
 class Articulo extends React.Component {
     constructor(props) {
@@ -20,21 +21,9 @@ class Articulo extends React.Component {
                             <h1 className="h1 text-muted">Articulo Acceso</h1>
                             <Article width="100%">
                                 <Field width="100%" label="Artículo" matchcode="GECL_CENT_BUKRS" />
-
                             </Article>
                             <Article width="100%">
-                                <div className="btn-group">
-                                    <button type="button" className="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action
-                                    </button>
-                                    <div className="dropdown-menu">
-                                        <a className="dropdown-item" href="#">Action</a>
-                                        <a className="dropdown-item" href="#">Another action</a>
-                                        <a className="dropdown-item" href="#">Something else here</a>
-                                        <div className="dropdown-divider"></div>
-                                        <a className="dropdown-item" href="#">Separated link</a>
-                                    </div>
-                                </div>
+                                <DropDown />
                             </Article>
                             <input type="button" className="btn btn-success" value="Crear" />
                         </div>
