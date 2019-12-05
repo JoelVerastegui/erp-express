@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 function Field(props) {
+    let validation = props.validation !== undefined ? props.validation : '';
     let label = props.label !== undefined ? props.label : '';
     let type = props.type !== undefined ? props.type : '';
+    let value = props.value !== undefined ? props.value : '';
+    let maxLength = props.maxLength !== undefined ? props.maxLength : '';
     let _class = props.class !== undefined ? props.class : '';
     let fieldClass = props.fieldClass !== undefined ? props.fieldClass : 'input-group input-group-sm m-2';
     let name = props.name !== undefined ? props.name : '';
@@ -10,24 +13,94 @@ function Field(props) {
     let width = props.width !== undefined ? props.width : '';
     let isDisabled = props.disabled !== undefined ? true : false;
 
+    function onFieldChange(event) {
+        // for a regular input field, read field name and value from the event
+        let fieldName = event.target.className;
+        let fieldValue = event.target.type !== 'checkbox' ? event.target.value : event.target.checked;
+
+        fieldName = fieldName.split(' ').find(x => x.startsWith('GECL'));
+
+        let tableName = `GETB_MM_${fieldName.substr(5, 4)}`;
+
+        if (props.onChange != undefined) {
+            props.onChange(tableName, fieldName, fieldValue);
+        }
+    }
+
+    function validationRender() {
+        let vType;
+
+        switch (validation["GECL_DOMI_DATATYPE"]) {
+            case 'varc':
+            case 'char': vType = 'text'; break;
+            case 'dats': vType = 'date'; break;
+            default: vType = 'number'; break;
+        }
+
+        return (
+            <Fragment>
+                {type !== 'checkbox' && (
+                    <div className={fieldClass} style={{ width: "auto" }}>
+                        {label !== '' &&
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">{validation["GECL_ELDA_SHLPNAME"]}</span>
+                            </div>
+                        }
+
+                        <input type={type !== '' ? type : vType} style={vType === 'text' ? { width: (validation["GECL_DOMI_LENG"]*10+10) } : { width: '150px' }} className={validation["GECL_DOMI_LENG"] + " " + _class + " form-control"} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+
+                        {
+                            matchcode !== '' &&
+                            <div className="input-group-append">
+                                <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" />
+                            </div>
+                        }
+
+                    </div>
+                )}
+            </Fragment>
+        )
+    }
+    function normalRender() {
+        return (
+            <Fragment>
+                {type !== 'checkbox' && (
+                    <div className={fieldClass} style={{ width: "auto" }}>
+                        {label !== '' &&
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">{label}</span>
+                            </div>
+                        }
+
+                        <input type={type !== '' ? type : 'text'} style={{ width: width }} className={_class + " form-control"} name={name} value={value} maxLength={maxLength} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+
+                        {
+                            matchcode !== '' &&
+                            <div className="input-group-append">
+                                <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" />
+                            </div>
+                        }
+
+                    </div>
+                )}
+
+                {type === 'checkbox' && (
+                    <div className={fieldClass} style={{ width: "auto" }}>
+                        <div className="custom-control custom-checkbox d-flex align-items-center">
+                            <input type="checkbox" className={"custom-control-input " + _class} id={_class} checked={value} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                            <label className="custom-control-label" htmlFor={_class}>{label}</label>
+                        </div>
+                    </div>
+
+                )}
+            </Fragment>
+        )
+    }
+
     return (
-        <div className={fieldClass} style={{width:width}}>
-            { label !== '' && 
-                <div className="input-group-prepend">
-                    <span className="input-group-text">{label}</span>
-                </div>
-            }
-            
-            <input type={type !== '' ? type : 'text'} className={_class + " form-control"} name={name} disabled={isDisabled}/>
-
-            {
-                matchcode !== '' &&
-                <div className="input-group-append">
-                    <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" />
-                </div>
-            }
-
-        </div>
+        <Fragment>
+            {validation !== '' ? validationRender() : normalRender()}
+        </Fragment>
     )
 }
 

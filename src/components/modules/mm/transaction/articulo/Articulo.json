@@ -1,0 +1,110 @@
+{
+    "GETB_MM_ARUM": {
+        "GECL_ARUM_MATNR": ""
+    },
+    "GETB_MM_ARTB": {
+        "GECL_ARTB_MAKTX": ""
+    },
+    "GETB_MM_AREM": {
+        "GECL_AREM_MATNR": ""
+    },
+    "GETB_MM_ARTI": {
+        "GECL_ARTI_MATNR": "",
+        "GECL_ARTI_MTART": "",
+        "GECL_ARTI_MEINS": "",
+        "GECL_ARTI_MATKL": "",
+        "GECL_ARTI_BISMT": "",
+        "GECL_ARTI_EXTWG": "",
+        "GECL_ARTI_SPART": "",
+        "GECL_ARTI_MSTAE": "",
+        "GECL_ARTI_PRDHA": "",
+        "GECL_ARTI_MSTDE": "",
+        "GECL_ARTI_MTPOS_MARA": "",
+        "GECL_ARTI_BEGRU": "",
+        "GECL_ARTI_BRGEW": "",
+        "GECL_ARTI_GEWEI": "",
+        "GECL_ARTI_VOLUM": "",
+        "GECL_ARTI_VOLEH": "",
+        "GECL_ARTI_NTGEW": "",
+        "GECL_ARTI_GROES": "",
+        "GECL_ARTI_EAN11": "",
+        "GECL_ARTI_NUMTP": "",
+        "GECL_ARTI_XCHPF": "",
+        "GECL_ARTI_BSTME": "",
+        "GECL_ARTI_NRFHG": "",
+        "GECL_ARTI_TAKLV": "",
+        "GECL_ARTI_MSTAV": "",
+        "GECL_ARTI_MSTDV": "",
+        "GECL_ARTI_MANDT": "",
+        "GECL_ARTI_CREADOPOR": ""
+    },
+    "GETB_MM_ARCE": {
+        "GECL_ARCE_WERKS": "",
+        "GECL_ARCE_MATNR": "",
+        "GECL_ARCE_EKGRP": "",
+        "GECL_ARCE_MMSTA": "",
+        "GECL_ARCE_MFRGR": "",
+        "GECL_ARCE_MMSTD": "",
+        "GECL_ARCE_KAUTB": "",
+        "GECL_ARCE_KORDB": "",
+        "GECL_ARCE_STAWN": "",
+        "GECL_ARCE_MTVER": "",
+        "GECL_ARCE_CASNR": "",
+        "GECL_ARCE_MTVFP": "",
+        "GECL_ARCE_XMCNG": "",
+        "GECL_ARCE_PRCTR": ""
+    },
+    "GETB_MM_ARDV": {
+        "GECL_ARDV_VKORG": "",
+        "GECL_ARDV_VTWEG": "",
+        "GECL_ARDV_MATNR": "",
+        "GECL_ARDV_VRKME": "",
+        "GECL_ARDV_DWERK": "",
+        "GECL_ARDV_VAVME": "",
+        "GECL_ARDV_VMSTD": "",
+        "GECL_ARDV_AUMNG": "",
+        "GECL_ARDV_LFMNG": "",
+        "GECL_ARDV_VERSG": "",
+        "GECL_ARDV_BONUS": "",
+        "GECL_ARDV_PMATN": "",
+        "GECL_ARDV_PRODH": "",
+        "GECL_ARDV_PROVG": "",
+        "GECL_ARDV_KTGRM": "",
+        "GECL_ARDV_MTPOS": ""
+    },
+    "GETB_MM_CENT": {
+        "GECL_CENT_NAME1": ""
+    },
+    "GETB_MM_ARVA": {
+        "GECL_ARVA_MATNR": ""
+    },
+    "LST_GETB_MM_ARUM": [
+        {
+            "GECL_ARUM_MEINH": "",
+            "GECL_ARUM_UMREN": "",
+            "GECL_ARUM_UMREZ": "",
+            "GECL_ARUM_MSEHI": "",
+            "IND_TRANSC": ""
+        }
+    ],
+    "LST_GETB_MM_AREM": [
+        {
+            "GECL_AREM_MEINH": "",
+            "GECL_AREM_HPEAN": "",
+            "GECL_AREM_EAN11": "",
+            "GECL_AREM_EANTP": "",
+            "IND_TRANSC": ""
+        }
+    ],
+    "LST_GETB_MM_ARCF": [
+        {
+            "GECL_ARCF_ALAND": "",
+            "GECL_ARCF_TAXM1": "",
+            "GECL_ARCF_TAXIM": "",
+            "IND_TRANSC": ""
+        }
+    ],
+    "INSTRUCTION": {
+        "IND_TRANSC": ""
+    }
+}

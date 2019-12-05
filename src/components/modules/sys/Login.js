@@ -15,7 +15,6 @@ function Login(props) {
 
 
     async function signIn() {
-        console.log('Enviando...');
         let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/validarusua?mandt=${env}&bname=${user}&passcode=${pass}`)
             .catch((err) => {
                 console.log(err);
