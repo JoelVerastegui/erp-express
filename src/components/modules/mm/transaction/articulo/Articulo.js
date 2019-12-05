@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
+
 import Field from '../../../../reusables/Field';
 import Article from '../../../../reusables/Article';
 import DropDown from '../../../../reusables/DropDown';
 import SubTitle from '../../../../reusables/SubTitle';
+import Modal from '../../../../reusables/Modal';
 
 class Articulo extends React.Component {
     constructor(props) {
@@ -107,30 +109,37 @@ class Articulo extends React.Component {
     section4 = () => {
         return (
             <div className="h-100 d-flex flex-column">
-                <h2 className="h2 text-muted">Articulo</h2>
-                <hr />
+                <Article>
+                    <h3 className="h3 text-muted">Articulo</h3>
+                    <Article width="auto" class="d-flex justify-content-start mb-2">
+                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" value="Datos Adicionales" />
+                        <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
+                        <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
+                    </Article>
+                </Article>
+                <hr className="my-2" />
 
-                <ul className="nav nav-tabs mb-3">
+                <ul className="nav nav-tabs mb-1">
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 1 ? 'nav-link active' : 'nav-link'} value="Datos Base 1" onClick={() => { this.changeTab(1) }} />
+                        <input type="button" className={this.state.tabActive === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Datos Base 1" onClick={() => { this.changeTab(1) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 2 ? 'nav-link active' : 'nav-link'} value="Compras" onClick={() => { this.changeTab(2) }} />
+                        <input type="button" className={this.state.tabActive === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Compras" onClick={() => { this.changeTab(2) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 3 ? 'nav-link active' : 'nav-link'} value="Organización Ventas 1" onClick={() => { this.changeTab(3) }} />
+                        <input type="button" className={this.state.tabActive === 3 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 1" onClick={() => { this.changeTab(3) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 4 ? 'nav-link active' : 'nav-link'} value="Organización Ventas 2" onClick={() => { this.changeTab(4) }} />
+                        <input type="button" className={this.state.tabActive === 4 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 2" onClick={() => { this.changeTab(4) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 5 ? 'nav-link active' : 'nav-link'} value="Com.ext.Importación" onClick={() => { this.changeTab(5) }} />
+                        <input type="button" className={this.state.tabActive === 5 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Com.ext.Importación" onClick={() => { this.changeTab(5) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 6 ? 'nav-link active' : 'nav-link'} value="Ventas:Gnral./Centro" onClick={() => { this.changeTab(6) }} />
+                        <input type="button" className={this.state.tabActive === 6 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Ventas:Gnral./Centro" onClick={() => { this.changeTab(6) }} />
                     </li>
                     <li className="nav-item">
-                        <input type="button" className={this.state.tabActive === 7 ? 'nav-link active' : 'nav-link'} value="Contabilidad 1" onClick={() => { this.changeTab(7) }} />
+                        <input type="button" className={this.state.tabActive === 7 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Contabilidad 1" onClick={() => { this.changeTab(7) }} />
                     </li>
                 </ul>
 
@@ -156,7 +165,7 @@ class Articulo extends React.Component {
             case 4: return (this.tab4());
             case 5: return (this.tab5());
             case 6: return (this.tab6());
-            case 7: return (this.tab7());
+            default: return (this.tab7());
         }
     }
     tab1 = () => {
@@ -166,7 +175,7 @@ class Articulo extends React.Component {
                     <Field width="200px" label="Artículo" class="GECL_ARTI_MATNR" disabled />
                     <Field width="300px" class="GECL_ARTB_MAKTX" />
                 </Article>
-                <hr />
+                <hr className="my-2" />
                 <Article class="d-flex flex-wrap justify-content-between overflow-auto">
                     <Article width="49.5%" class="d-flex flex-wrap flex-column">
                         <SubTitle title="Datos Generales" />
@@ -245,10 +254,22 @@ class Articulo extends React.Component {
     render() {
         return (
             <Fragment>
-                {this.state.section == 1 && this.section1()}
-                {this.state.section == 2 && this.section2()}
-                {this.state.section == 3 && this.section3()}
-                {this.state.section == 4 && this.section4()}
+                {this.state.section === 1 && this.section1()}
+                {this.state.section === 2 && this.section2()}
+                {this.state.section === 3 && this.section3()}
+                {this.state.section === 4 && this.section4()}
+                
+                <Modal title="Modal de prueba">
+                    <Article>
+                    <h1 className="h1">PRUEBA1</h1>
+                    <hr />
+                    <p>Contenido :P</p>
+                    </Article>
+                    <Article>
+                        <input type="button" className="btn btn-success" value="Confirmar" />
+                        <input type="button" className="btn btn-danger" value="Cancelar" />
+                    </Article>
+                </Modal>
             </Fragment>
         )
     }

@@ -25,7 +25,7 @@ function Login(props) {
         if (res) {
             let data = res.data;
 
-            if(data.V_TYPE_MESSAGE != 'E'){
+            if(data.V_TYPE_MESSAGE !== 'E'){
                 props.sendSession(data);
             } else{
                 alert('Las credenciales son incorrectas.');

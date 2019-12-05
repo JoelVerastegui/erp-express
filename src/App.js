@@ -28,7 +28,7 @@ class App extends React.Component {
   }
 
   updateSession(data) {
-    if (data != undefined) {
+    if (data !== undefined) {
       let user = data["DATA_USUA"];
       sessionStorage.setItem('session', user);
       this.setState({
