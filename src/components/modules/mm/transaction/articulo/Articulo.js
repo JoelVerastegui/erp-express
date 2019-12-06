@@ -40,6 +40,102 @@ class Articulo extends React.Component {
                 GECL_DOMI_DATATYPE: "char",
                 GECL_DOMI_LENG: 1,
                 GECL_CAMP_NAME: "GECL_ARTI_XCHPF"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "N°Artí­culo antiguo",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_BISMT"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Grupo artí­c. ext.",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_EXTWG"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Sector",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_SPART"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Status Artículo",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_MSTAE"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Jquí­a.productos",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_PRDHA"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Válido de",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_MSTDE"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Sector",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_MTPOS_MARA"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Grupo Autorizaciones",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_BEGRU"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Peso Bruto",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_BRGEW"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Unidad de peso",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_GEWEI"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Volumen",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_VOLUM"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Unidad de volumen",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_VOLEH"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Peso neto",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_NTGEW"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Tamaño/Dimens.",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_GROES"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Código GTIN",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_EAN11"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Tipo EAN",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_NUMTP"
             }],
             data: [
                 {
@@ -177,17 +273,17 @@ class Articulo extends React.Component {
     }
     section4 = () => {
         return (
-            <div className="h-100 d-flex flex-column">
-                <Article>
-                    <h3 className="h3 text-muted">Articulo</h3>
-                    <Article width="auto" class="d-flex justify-content-start mb-2">
+            <div className="h-100 d-flex flex-column px-3">
+                <Article class="d-flex flex-wrap p-3 justify-content-between align-items-center">
+                    <h4 className="h4 text-muted font-weight-normal m-0">Articulo</h4>
+                    <Article width="auto" class="d-flex justify-content-start">
                         <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" value="Datos Adicionales" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
                     </Article>
                 </Article>
                 <hr className="my-2" />
-                <Article>
+                <Article class="d-flex py-2">
                     <ul className="nav-tabs mb-1 d-flex" style={{ overflowX: "auto", overflowY: "hidden", listStyleType: "none" }}>
                         <li className="nav-item">
                             <input type="button" className={this.state.tab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Datos Base 1" onClick={() => { this.changeTab(1) }} />
@@ -211,12 +307,15 @@ class Articulo extends React.Component {
                             <input type="button" className={this.state.tab === 7 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Contabilidad 1" onClick={() => { this.changeTab(7) }} />
                         </li>
                     </ul>
-
                 </Article>
 
-                {
-                    this.renderTab(this.state.tab)
-                }
+                <Article class="bg-primary p-1 d-flex justify-content-start align-self-center">
+                    <h6 className="h6 text-white font-weight-normal m-0">Datos Base 1</h6>
+                </Article>
+
+                <Article class="border border-primary p-4 overflow-auto px-3">
+                    {this.renderTab(this.state.tab)}
+                </Article>
             </div>
         )
     }
@@ -241,53 +340,35 @@ class Articulo extends React.Component {
     tab1 = () => {
         return (
             <Fragment>
-                <Article class="d-flex justify-content-start">
-                    <Field width="200px" label="Artículo" class="GECL_ARTI_MATNR" disabled />
-                    <Field width="300px" class="GECL_ARTB_MAKTX" />
+                <Article class="d-flex flex-wrap flex-column">
+                    <SubTitle title="Datos Generales" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GRME_MATKL" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BISMT")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BISMT"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_EXTWG")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_EXTWG"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_SPART")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_SPART"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_SECO_SPART" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MSTAE")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MSTAE"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_STMA_MMSTA" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_PRDHA")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_PRDHA"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MSTDE")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MSTDE"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MTPOS_MARA")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MTPOS_MARA"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_TIPO_MTPOS" />
+
+                    <br />
+
+                    <SubTitle title="Grupo de Autorización material" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BEGRU")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BEGRU"]} onChange={this.updateJSON.bind(this)} />
+
+                    <br />
+
+                    <SubTitle title="Dimensiones/EAN" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BRGEW")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BRGEW"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_GEWEI")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_GEWEI"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_VOLUM")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_VOLUM"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_VOLEH")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_VOLEH"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_NTGEW")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_NTGEW"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_GROES")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_GROES"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_EAN11")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_EAN11"]} onChange={this.updateJSON.bind(this)} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_NUMTP")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_NUMTP"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GTIN_NUMTP" />
                 </Article>
-                <hr className="my-2" />
-                <Article class="d-flex flex-wrap justify-content-between overflow-auto">
-                    <Article width={window.innerWidth <= this.state.isTablet ? "100%" : "49.5%"} class="d-flex flex-wrap flex-column">
-                        <SubTitle title="Datos Generales" />
-                        <Article class={window.innerWidth <= this.state.isMobile ? "d-flex flex-column" : undefined} >
-                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} matchcode="GECL_UMED_MSEHI" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} />
-                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} matchcode="GECL_GRME_MATKL" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} />
-                            <Field width="300px" label="N°Artí­culo antiguo" class="GECL_ARTI_BISMT" />
-                            <Field width="200px" label="Grupo artí­c. ext." class="GECL_ARTI_EXTWG" />
-                            <Field width="200px" label="Sector" class="GECL_ARTI_SPART" matchcode="GECL_SECO_SPART" />
-                            <Field width="200px" label="Status Artículo" class="GECL_ARTI_MSTAE" matchcode="GECL_STMA_MMSTA" />
-                            <Field width="200px" label="Jquí­a.productos" class="GECL_ARTI_PRDHA" />
-                            <Field width="150px" label="Válido de" class="GECL_ARTI_MSTDE" type="date" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MSTDE"]} onChange={this.updateJSON.bind(this)} />
-                            <Field width="200px" label="Sector" class="GECL_ARTI_MTPOS_MARA" matchcode="GECL_TIPO_MTPOS" />
-                        </Article>
-
-                        <br />
-
-                        <SubTitle title="Grupo de Autorización material" />
-                        <Article class={window.innerWidth <= this.state.isMobile ? "d-flex flex-column" : undefined} >
-                            <Field width="200px" label="Grupo Autorizaciones" class="GECL_ARTI_BEGRU" />
-                        </Article>
-                    </Article>
-
-                    <div className="h-100" style={window.innerWidth <= this.state.isTablet ? {} : { backgroundColor: "#f7f7f9", width: "3px" }}></div>
-
-                    <Article width={window.innerWidth <= this.state.isTablet ? "100%" : "49.5%"} class="d-flex flex-wrap flex-column">
-                        <SubTitle title="Dimensiones/EAN" />
-                        <Article class={window.innerWidth <= this.state.isMobile ? "d-flex flex-column" : undefined}>
-                            <Field width="160px" label="Peso Bruto" class="GECL_ARTI_BRGEW" type="number" />
-                            <Field width="360px" label="Unidad de peso" class="GECL_ARTI_GEWEI" matchcode="GECL_UMED_MSEHI" />
-                            <Field width="160px" label="Volumen" class="GECL_ARTI_VOLUM" type="number" />
-                            <Field width="360px" label="Unidad de volumen" class="GECL_ARTI_VOLEH" matchcode="GECL_UMED_MSEHI" />
-                            <Field width="160px" label="Peso neto" class="GECL_ARTI_NTGEW" type="number" />
-                            <Field width="360px" label="Tamaño/Dimens." class="GECL_ARTI_GROES" />
-                            <Field width="360px" label="Código GTIN" class="GECL_ARTI_EAN11" />
-                            <Field width="360px" label="Tipo EAN" class="GECL_ARTI_NUMTP" matchcode="GECL_GTIN_NUMTP" />
-
-
-                        </Article>
-                    </Article>
-                </Article>
-
             </Fragment>
         )
     }

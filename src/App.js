@@ -51,9 +51,7 @@ class App extends React.Component {
               </Header>
 
               <Section headerH={this.state.headerH} footerH={this.state.footerH} innerHeight={this.state.innerHeight}>
-                <div className="p-3 shadow bg-white" style={{ width: "97%", height: "95%", margin: "1.25% 1.5% 1.25% 1.5%" }}>
                   <Routes />
-                </div>
               </Section>
 
               <Footer height={this.state.footerH}>

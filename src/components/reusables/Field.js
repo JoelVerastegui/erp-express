@@ -18,7 +18,7 @@ function Field(props) {
         let fieldName = event.target.className;
         let fieldValue = event.target.type !== 'checkbox' ? event.target.value : event.target.checked;
 
-        if(event.target.type === 'checkbox'){
+        if (event.target.type === 'checkbox') {
             fieldValue = fieldValue ? 'X' : '';
         }
 
@@ -51,7 +51,7 @@ function Field(props) {
                             </div>
                         }
 
-                        <input type={type !== '' ? type : vType} style={vType === 'text' ? { width: (validation["GECL_DOMI_LENG"]*10+10) + "px" } : { width: '150px' }} className={validation["GECL_CAMP_NAME"] + " " + _class + " form-control"} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                        <input type={type !== '' ? type : vType} style={vType === 'text' ? { width: (validation["GECL_DOMI_LENG"] * 10 + 10) + "px" } : { width: '150px' }} className={validation["GECL_CAMP_NAME"] + " " + _class + " form-control"} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
 
                         {
                             matchcode !== '' &&
@@ -63,7 +63,7 @@ function Field(props) {
                     </div>
                 )}
                 {type === 'checkbox' && (
-                    <div className={fieldClass} style={width !== '' ? {width: width} : { width: "auto" }}>
+                    <div className={fieldClass} style={width !== '' ? { width: width } : { width: "auto" }}>
                         <div className="custom-control custom-checkbox d-flex align-items-center">
                             <input type="checkbox" className={"custom-control-input " + validation["GECL_CAMP_NAME"] + " " + _class} id={validation["GECL_CAMP_NAME"]} checked={value} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
                             <label className="custom-control-label" htmlFor={validation["GECL_CAMP_NAME"]}>{validation["GECL_ELDA_SHLPNAME"]}</label>
@@ -107,10 +107,48 @@ function Field(props) {
             </Fragment>
         )
     }
+    function newRender() {
+        let vType;
+
+        switch (validation["GECL_DOMI_DATATYPE"]) {
+            case 'varc':
+            case 'char': vType = 'text'; break;
+            case 'dats': vType = 'date'; break;
+            default: vType = 'number'; break;
+        }
+
+        return (
+            <Fragment>
+                {type !== 'checkbox' && (
+                    <div className="d-flex justify-content-start align-items-center">
+                        <small className="m-0 text-nowrap text-truncate font-weight-bold" style={{ width: "250px" }}>{validation["GECL_ELDA_SHLPNAME"]}</small>
+                        <div className="input-group input-group-sm m-2" style={{ width: "auto" }}>
+                            <input type={type !== '' ? type : vType} className={validation["GECL_CAMP_NAME"] + " " + _class + " form-control col-form-label-sm"} style={{ width: "300px" }} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                            {
+                                matchcode !== '' &&
+                                <div className="input-group-append">
+                                    <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                )}
+                {type === 'checkbox' && (
+                    <div className={fieldClass} style={width !== '' ? { width: width } : { width: "auto" }}>
+                        <div className="custom-control custom-checkbox d-flex align-items-center">
+                            <input type="checkbox" className={"custom-control-input " + validation["GECL_CAMP_NAME"] + " " + _class} id={validation["GECL_CAMP_NAME"]} checked={value} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                            <label className="custom-control-label" htmlFor={validation["GECL_CAMP_NAME"]}><small className="text-nowrap text-truncate font-weight-bold">{validation["GECL_ELDA_SHLPNAME"]}</small></label>
+                        </div>
+                    </div>
+                )}
+            </Fragment>
+        )
+    }
 
     return (
         <Fragment>
-            {validation !== '' ? validationRender() : normalRender()}
+            {newRender()}
+            {/* {validation !== '' ? validationRender() : newRender()} */}
         </Fragment>
     )
 }
