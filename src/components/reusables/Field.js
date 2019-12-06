@@ -41,13 +41,13 @@ function Field(props) {
             <Fragment>
                 {type !== 'checkbox' && (
                     <div className={fieldClass} style={{ width: "auto" }}>
-                        {label !== '' &&
+                        {validation["GECL_ELDA_SHLPNAME"] !== '' &&
                             <div className="input-group-prepend">
                                 <span className="input-group-text">{validation["GECL_ELDA_SHLPNAME"]}</span>
                             </div>
                         }
 
-                        <input type={type !== '' ? type : vType} style={vType === 'text' ? { width: (validation["GECL_DOMI_LENG"]*10+10) } : { width: '150px' }} className={validation["GECL_DOMI_LENG"] + " " + _class + " form-control"} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                        <input type={type !== '' ? type : vType} style={vType === 'text' ? { width: (validation["GECL_DOMI_LENG"]*10+10) + "px" } : { width: '150px' }} className={validation["GECL_CAMP_NAME"] + " " + _class + " form-control"} name={name} value={value} maxLength={validation["GECL_DOMI_LENG"]} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
 
                         {
                             matchcode !== '' &&

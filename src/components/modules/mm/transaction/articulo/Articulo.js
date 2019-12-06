@@ -23,7 +23,12 @@ class Articulo extends React.Component {
             section: 1,
             tab: 1,
             JSON_DATA: JSON_STRUCTURE,
-            VALIDATION: [],
+            VALIDATION: [{
+                GECL_ELDA_SHLPNAME: "UMB",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 16,
+                GECL_CAMP_NAME: "GECL_ARTI_MEINS"
+            }],
             data: [
                 {
                     "CODIGO": "c006",
@@ -67,28 +72,28 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=GETB_MM_ARTI`)
-            .catch((err) => {
-                console.log(err);
-                return;
-            });
+        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=GETB_MM_ARTI`)
+        //     .catch((err) => {
+        //         console.log(err);
+        //         return;
+        //     });
 
-        if (res) {
-            let data = res.data;
+        // if (res) {
+        //     let data = res.data;
 
-            if (data.V_TYPE_MESSAGE !== 'E') {
-                console.log(data);
-                this.setState({
-                    VALIDATION: data,
-                    loading: false
-                })
-            } else {
-                alert('Las credenciales son incorrectas.');
-            }
+        //     if (data.V_TYPE_MESSAGE !== 'E') {
+        //         console.log(data);
+        //         this.setState({
+        //             VALIDATION: data,
+        //             loading: false
+        //         })
+        //     } else {
+        //         alert('Las credenciales son incorrectas.');
+        //     }
 
-        } else {
-            alert('Error de conexión con el servidor.');
-        }
+        // } else {
+        //     alert('Error de conexión con el servidor.');
+        // }
     }
 
     updateJSON(table, field, value) {
@@ -233,7 +238,7 @@ class Articulo extends React.Component {
                     <Article width={window.innerWidth <= this.state.isTablet ? "100%" : "49.5%"} class="d-flex flex-wrap flex-column">
                         <SubTitle title="Datos Generales" />
                         <Article class={window.innerWidth <= this.state.isMobile ? "d-flex flex-column" : undefined} >
-                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} width="160px" label="UMB" class="GECL_ARTI_MEINS" matchcode="GECL_UMED_MSEHI" />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} matchcode="GECL_UMED_MSEHI" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} />
                             <Field width="260px" label="Grupo Artículo" class="GECL_ARTI_MATKL" matchcode="GECL_GRME_MATKL" />
                             <Field width="300px" label="N°Artí­culo antiguo" class="GECL_ARTI_BISMT" />
                             <Field width="200px" label="Grupo artí­c. ext." class="GECL_ARTI_EXTWG" />
