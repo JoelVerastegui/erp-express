@@ -28,6 +28,18 @@ class Articulo extends React.Component {
                 GECL_DOMI_DATATYPE: "char",
                 GECL_DOMI_LENG: 16,
                 GECL_CAMP_NAME: "GECL_ARTI_MEINS"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Grp. Artículo",
+                GECL_DOMI_DATATYPE: "deci",
+                GECL_DOMI_LENG: 20,
+                GECL_CAMP_NAME: "GECL_ARTI_MATKL"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Suj. Lote",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 1,
+                GECL_CAMP_NAME: "GECL_ARTI_XCHPF"
             }],
             data: [
                 {
@@ -239,7 +251,7 @@ class Articulo extends React.Component {
                         <SubTitle title="Datos Generales" />
                         <Article class={window.innerWidth <= this.state.isMobile ? "d-flex flex-column" : undefined} >
                             <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} matchcode="GECL_UMED_MSEHI" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} />
-                            <Field width="260px" label="Grupo Artículo" class="GECL_ARTI_MATKL" matchcode="GECL_GRME_MATKL" />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} matchcode="GECL_GRME_MATKL" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} />
                             <Field width="300px" label="N°Artí­culo antiguo" class="GECL_ARTI_BISMT" />
                             <Field width="200px" label="Grupo artí­c. ext." class="GECL_ARTI_EXTWG" />
                             <Field width="200px" label="Sector" class="GECL_ARTI_SPART" matchcode="GECL_SECO_SPART" />
@@ -271,7 +283,7 @@ class Articulo extends React.Component {
                             <Field width="360px" label="Código GTIN" class="GECL_ARTI_EAN11" />
                             <Field width="360px" label="Tipo EAN" class="GECL_ARTI_NUMTP" matchcode="GECL_GTIN_NUMTP" />
 
-                            <Field type="checkbox" label="Sujeto Lote" class="GECL_ARTI_XCHPF" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_XCHPF"]} onChange={this.updateJSON.bind(this)} />
+
                         </Article>
                     </Article>
                 </Article>
@@ -299,10 +311,7 @@ class Articulo extends React.Component {
                             <Field width="260px" label="Gr.compras" class="GECL_ARCE_EKGRP" matchcode="GECL_GRCO_EKGRP" />
                             <Field width="260px" label="Sts. Art. Centro" class="GECL_ARCE_MMSTA" matchcode="GECL_STMA_MMSTA" />
                             <Field width="260px" maxLength="9" label="GrpPortArt" class="GECL_ARCE_MFRGR" value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_MFRGR"]} onChange={this.updateJSON.bind(this)} />
-                            <Field type="checkbox" label="SujetoLote" class="GECL_ARTI_XCHPF" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_XCHPF"]} onChange={this.updateJSON.bind(this)} />
-                            <Field type="checkbox" label="Sujeto2" class="GECL_ARTI_XCHPF2" />
-
-                            <Field type="checkbox" label="Sujeto Lote" class="GECL_ARTI_XCHPF" value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_XCHPF"]} onChange={this.updateJSON.bind(this)} />
+                            <Field type="checkbox" width="100%" validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_XCHPF")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_XCHPF"]} onChange={this.updateJSON.bind(this)} />
                         </Article>
                     </Article>
                     <Article width={window.innerWidth <= this.state.isTablet ? "100%" : "49.5%"} class="d-flex flex-wrap flex-column">
@@ -364,10 +373,10 @@ class Articulo extends React.Component {
     render() {
         return (
             <Fragment>
-                {this.state.loading ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center"><img style={{width:"300px",height:"160px"}} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" /></div>)
+                {this.state.loading ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center"><img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" /></div>)
                     : (
-                    this.content()
-                )}
+                        this.content()
+                    )}
 
 
             </Fragment>

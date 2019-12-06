@@ -18,6 +18,10 @@ function Field(props) {
         let fieldName = event.target.className;
         let fieldValue = event.target.type !== 'checkbox' ? event.target.value : event.target.checked;
 
+        if(event.target.type === 'checkbox'){
+            fieldValue = fieldValue ? 'X' : '';
+        }
+
         fieldName = fieldName.split(' ').find(x => x.startsWith('GECL'));
 
         let tableName = `GETB_MM_${fieldName.substr(5, 4)}`;
@@ -58,6 +62,14 @@ function Field(props) {
 
                     </div>
                 )}
+                {type === 'checkbox' && (
+                    <div className={fieldClass} style={width !== '' ? {width: width} : { width: "auto" }}>
+                        <div className="custom-control custom-checkbox d-flex align-items-center">
+                            <input type="checkbox" className={"custom-control-input " + validation["GECL_CAMP_NAME"] + " " + _class} id={validation["GECL_CAMP_NAME"]} checked={value} onChange={(e) => onFieldChange(e)} disabled={isDisabled} />
+                            <label className="custom-control-label" htmlFor={validation["GECL_CAMP_NAME"]}>{validation["GECL_ELDA_SHLPNAME"]}</label>
+                        </div>
+                    </div>
+                )}
             </Fragment>
         )
     }
@@ -91,7 +103,6 @@ function Field(props) {
                             <label className="custom-control-label" htmlFor={_class}>{label}</label>
                         </div>
                     </div>
-
                 )}
             </Fragment>
         )
