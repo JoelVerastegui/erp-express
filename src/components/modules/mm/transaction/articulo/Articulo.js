@@ -8,6 +8,7 @@ import Article from '../../../../reusables/Article';
 import DropDown from '../../../../reusables/DropDown';
 import SubTitle from '../../../../reusables/SubTitle';
 import Modal from '../../../../reusables/Modal';
+import Table from '../../../../reusables/Table';
 
 const axios = require('axios');
 
@@ -404,7 +405,12 @@ class Articulo extends React.Component {
     }
     tab3 = () => {
         return (
-            <h1 className="h1">Organización Ventas 1</h1>
+            <Fragment>
+                <h1 className="h1">Organización Ventas 1</h1>
+                <Table data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} headers={['Código','Nombre','Descripción','País']}  />
+                {/* Crear una propiedad que reciba un arreglo de objetos de configuracion para los headers */}
+                {/* para definir los pk, disabled, etc */}
+            </Fragment>
         )
     }
     tab4 = () => {
