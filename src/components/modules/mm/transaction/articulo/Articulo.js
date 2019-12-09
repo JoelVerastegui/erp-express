@@ -205,16 +205,29 @@ class Articulo extends React.Component {
         // }
     }
 
-    updateJSON(table, field, value) {
-        this.setState({
-            JSON_DATA: {
-                ...this.state.JSON_DATA,
-                [table]: {
-                    ...this.state.JSON_DATA[table],
-                    [field]: value
+    updateJSON(table, field, value, index) {
+        if (index !== undefined) {
+            let temp = this.state.JSON_DATA[table];
+
+            temp[index] = {...temp[index], [field]: value}
+
+            this.setState({
+                JSON_DATA: {
+                    ...this.state.JSON_DATA,
+                    [table]: temp
                 }
-            }
-        })
+            })
+        } else {
+            this.setState({
+                JSON_DATA: {
+                    ...this.state.JSON_DATA,
+                    [table]: {
+                        ...this.state.JSON_DATA[table],
+                        [field]: value
+                    }
+                }
+            })
+        }
     }
 
     /* ===== SECTION RENDERS ===== */
@@ -407,7 +420,28 @@ class Articulo extends React.Component {
         return (
             <Fragment>
                 <h1 className="h1">Organización Ventas 1</h1>
-                <Table data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} headers={['Código','Nombre','Descripción','País']}  />
+                <Table data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
+                    {
+                        header: 'Código',
+                        class: 'GECL_ARUM_MEINH'
+                    }, {
+                        header: 'Nombre',
+                        class: 'GECL_ARUM_UMREN',
+                        pk: false,
+                        disabled: false
+                    }, {
+                        header: 'Descripción',
+                        class: 'GECL_ARUM_UMREZ',
+                        pk: false
+                    }, {
+                        header: 'País',
+                        class: 'GECL_ARUM_MSEHI',
+                        pk: false,
+                        disabled: true
+                    }, {
+                        class: 'IND_TRANSC'
+                    }
+                ]} />
                 {/* Crear una propiedad que reciba un arreglo de objetos de configuracion para los headers */}
                 {/* para definir los pk, disabled, etc */}
             </Fragment>

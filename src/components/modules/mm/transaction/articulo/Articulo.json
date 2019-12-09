@@ -85,6 +85,20 @@
             "GECL_ARUM_UMREZ": "Descripcion breve",
             "GECL_ARUM_MSEHI": "Perú",
             "IND_TRANSC": "I"
+        },
+        {
+            "GECL_ARUM_MEINH": "A021",
+            "GECL_ARUM_UMREZ": "Descripcion breve 3",
+            "GECL_ARUM_UMREN": "Artículo 21",
+            "GECL_ARUM_MSEHI": "Perú",
+            "IND_TRANSC": "I"
+        },
+        {
+            "GECL_ARUM_UMREZ": "Descripcion breve 4",
+            "GECL_ARUM_MSEHI": "Perú",
+            "GECL_ARUM_MEINH": "A022",
+            "GECL_ARUM_UMREN": "Artículo 22",
+            "IND_TRANSC": "I"
         }
     ],
     "LST_GETB_MM_AREM": [

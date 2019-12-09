@@ -1,104 +1,146 @@
 import React, { Fragment } from 'react';
 
-function editableTable(props) {
-    let fit = props.fit !== undefined ? props.fit : '';
+class Table extends React.Component {
+    constructor(props) {
+        super(props);
 
-    return (
-        <table className="table table-bordered" style={fit !== '' ? { width: "1px", whiteSpace: "nowrap" } : {}}>
-            <thead className="thead-light">
-                <tr>
+        this.state = {
+            readonly: this.props.readonly !== undefined ? this.props.readonly : '',
+            fit: this.props.fit !== undefined ? this.props.fit : '',
+            options: this.props.options,
+            data: this.props.data
+        }
+    }
+
+    onFieldChange(event) {
+        // for a regular input field, read field name and value from the event
+        let fieldName = event.target.className;
+        let fieldValue = event.target.type !== 'checkbox' ? event.target.value : event.target.checked;
+
+        if (event.target.type === 'checkbox') {
+            fieldValue = fieldValue ? 'X' : '';
+        }
+
+        fieldName = fieldName.split(' ').find(x => x.startsWith('GECL'));
+
+        let tableName = `LST_GETB_MM_${fieldName.substr(5, 4)}`;
+
+        let nodes = Array.prototype.slice.call(event.target.parentElement.parentElement.parentElement.children);
+        let row = event.target.parentElement.parentElement;
+        let fieldIndex = nodes.indexOf(row);
+
+        if (this.props.onChange != undefined) {
+            this.props.onChange(tableName, fieldName, fieldValue, fieldIndex);
+            this.forceUpdate();
+        }
+    }
+
+    componentDidMount() {
+        this.sortData(this.state.data);
+    }
+
+    componentWillReceiveProps() {
+        this.sortData(this.props.data);
+    }
+
+    sortData(messyData) {
+        let data = [];
+
+        messyData.forEach(d => {
+            let data2 = {};
+            this.state.options.forEach(o => {
+                data2 = { ...data2, [o["class"]]: d[o["class"]] }
+            })
+            data.push(data2);
+        })
+
+        this.setState({
+            data
+        })
+    }
+
+    editableTable() {
+        return (
+            <table className="table table-bordered" style={this.state.fit !== '' ? { width: "auto" } : {}}>
+                <thead className="thead-light">
+                    <tr>
+                        {
+                            this.state.options.map((e, i) => {
+                                if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
+                            })
+                        }
+                    </tr>
+                </thead>
+                <tbody>
                     {
-                        props.headers.map((e) => {
-                            return (<th>{e}</th>)
+                        this.state.data.map((e, i) => {
+                            return (
+                                <tr key={i}>
+                                    {
+                                        Object.keys(e).map((f, ind) => {
+                                            return (<td className="p-0" key={ind}>
+                                                <input className={f + " form-control"}
+                                                    type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
+                                                    value={this.state.data[i][f]}
+                                                    style={this.state.options[ind]["header"] === undefined ? { display: "none" } : {}}
+                                                    data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
+                                                    disabled={this.state.options[ind]["disabled"] !== undefined ? this.state.options[ind]["disabled"] ? true : false : false}
+                                                    onChange={(x) => this.onFieldChange(x)} />
+                                            </td>)
+                                        })
+                                    }
+                                </tr>
+                            )
                         })
                     }
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    props.data.map((e, i) => {
-                        return (
-                            <tr key={i}>
-                                {
-                                    Object.keys(e).map((f) => {
-                                        if (f.startsWith('GECL')) return (<td className="p-0"><input className="form-control" value={e[f]} /></td>)
-                                    })
-                                }
-                            </tr>
-                        )
-                    })
-                }
-                <tr key="0">
-                    <td className="p-0"><input className="form-control" value="A001" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo 1" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo de prueba" /></td>
-                    <td className="p-0"><input className="form-control" value="Perú" /></td>
-                </tr>
-                <tr key="1">
-                    <td className="p-0"><input className="form-control" value="A002" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo 2" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo de prueba 2" /></td>
-                    <td className="p-0"><input className="form-control" value="Perú" /></td>
-                </tr>
-                <tr key="2">
-                    <td className="p-0"><input className="form-control" value="A003" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo 3" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo de prueba 3" /></td>
-                    <td className="p-0"><input className="form-control" value="Perú" /></td>
-                </tr>
-                <tr key="3">
-                    <td className="p-0"><input className="form-control" value="A004" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo 4" /></td>
-                    <td className="p-0"><input className="form-control" value="Articulo de prueba 4" /></td>
-                    <td className="p-0"><input className="form-control" value="Perú" /></td>
-                </tr>
-            </tbody>
-        </table>
-    )
-}
-function readonlyTable(props) {
-    let fit = props.fit !== undefined ? props.fit : '';
+                </tbody>
+            </table>
+        )
+    }
 
-    return (
-        <table className="table table-bordered table-hover" style={fit !== '' ? { width: "1px", whiteSpace: "nowrap" } : {}}>
-            <thead className="thead-light">
-                <tr>
+    readonlyTable() {
+        return (
+            <table className="table table-bordered table-hover" style={this.state.fit !== '' ? { width: "auto" } : {}}>
+                <thead className="thead-light">
+                    <tr>
+                        {
+                            this.state.options.map((e, i) => {
+                                if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
+                            })
+                        }
+                    </tr>
+                </thead>
+                <tbody>
                     {
-                        props.headers.map((e) => {
-                            return (<th>{e}</th>)
+                        this.state.data.map((e, i) => {
+                            return (
+                                <tr key={i}>
+                                    {
+                                        Object.keys(e).map((f, ind) => {
+                                            return (<td key={ind}
+                                                style={this.state.options[ind]["header"] === undefined ? { display: "none" } : {}}>
+                                                {e[f]}
+                                            </td>)
+                                        })
+                                    }
+                                </tr>
+                            )
                         })
                     }
-                </tr>
-            </thead>
-            <tbody>
+                </tbody>
+            </table>
+        )
+    }
+
+    render() {
+        return (
+            <Fragment>
                 {
-                    props.data.map((e, i) => {
-                        return (
-                            <tr key={i}>
-                                {
-                                    Object.keys(e).map((f) => {
-                                        if (f.startsWith('GECL')) return (<td>{e[f]}</td>)
-                                    })
-                                }
-                            </tr>
-                        )
-                    })
+                    this.state.readonly !== '' ? this.readonlyTable() : this.editableTable()
                 }
-            </tbody>
-        </table>
-    )
-}
-
-function Table(props) {
-    let readonly = props.readonly !== undefined ? props.readonly : '';
-
-    return (
-        <Fragment>
-            {
-                readonly !== '' ? readonlyTable(props) : editableTable(props)
-            }
-        </Fragment>
-    )
+            </Fragment>
+        )
+    }
 }
 
 export default Table;
