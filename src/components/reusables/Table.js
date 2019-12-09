@@ -31,7 +31,6 @@ class Table extends React.Component {
 
         if (this.props.onChange != undefined) {
             this.props.onChange(tableName, fieldName, fieldValue, fieldIndex);
-            this.forceUpdate();
         }
     }
 
@@ -84,7 +83,7 @@ class Table extends React.Component {
                                                     value={this.state.data[i][f]}
                                                     style={this.state.options[ind]["header"] === undefined ? { display: "none" } : {}}
                                                     data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
-                                                    disabled={this.state.options[ind]["disabled"] !== undefined ? this.state.options[ind]["disabled"] ? true : false : false}
+                                                    disabled={this.state.options[ind]["disabled"] !== undefined || this.state.option[ind]["pk"] !== undefined ? this.state.options[ind]["disabled"] || this.state.option[ind]["pk"] ? true : false : false}
                                                     onChange={(x) => this.onFieldChange(x)} />
                                             </td>)
                                         })
@@ -132,12 +131,71 @@ class Table extends React.Component {
         )
     }
 
+    validation() {
+        let keys = this.state.options.map((f) => {
+            if (f["pk"] !== undefined && f["pk"] === true) {
+                return f["class"];
+            }
+        })
+
+        keys = keys.filter(x => x !== undefined);
+
+        let lastRow = this.state.data[this.state.data.length - 1];
+
+        if (keys.length) {
+            let equals = 0;
+
+            let lastRowKeys = keys.map(x => { return (lastRow[x]+"").trim() });
+
+            this.state.data.map((e, i) => {
+                if (i !== this.state.data.length - 1) {
+                    let currentRowKeys = keys.map(x => { return (e[x]+"").trim() });
+
+                    if (JSON.stringify(lastRowKeys) == JSON.stringify(currentRowKeys)) {
+                        equals++;
+                    }
+                }
+            })
+
+            if (equals) {
+                alert('Los valores claves ingresados no deben repetirse');
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    appendRow() {
+        if (this.validation()) {
+            let data = {};
+
+            this.state.options.forEach((f) => {
+                if (f["class"].startsWith('GECL')) {
+                    data[f["class"]] = ''
+                }
+            })
+
+            data["IND_TRANSC"] = 'I';
+
+            let tableName = Object.keys(data).find(x => x.startsWith('GECL')).substr(5, 4);
+
+            tableName = `LST_GETB_MM_${tableName}`;
+
+            this.props.onChange(tableName, data);
+        }
+    }
+
     render() {
         return (
             <Fragment>
                 {
                     this.state.readonly !== '' ? this.readonlyTable() : this.editableTable()
                 }
+                <div className="d-flex">
+                    <input type="button" className="btn btn-success mx-1" value="Agregar" onClick={(e) => { this.appendRow(e) }} />
+                    <input type="button" className="btn btn-danger mx-1" value="Eliminar" />
+                </div>
             </Fragment>
         )
     }

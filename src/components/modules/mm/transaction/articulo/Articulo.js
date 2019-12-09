@@ -206,27 +206,36 @@ class Articulo extends React.Component {
     }
 
     updateJSON(table, field, value, index) {
-        if (index !== undefined) {
-            let temp = this.state.JSON_DATA[table];
-
-            temp[index] = {...temp[index], [field]: value}
-
-            this.setState({
-                JSON_DATA: {
-                    ...this.state.JSON_DATA,
-                    [table]: temp
-                }
-            })
-        } else {
-            this.setState({
-                JSON_DATA: {
-                    ...this.state.JSON_DATA,
-                    [table]: {
-                        ...this.state.JSON_DATA[table],
-                        [field]: value
+        if(typeof field == "string"){
+            if (index !== undefined) {
+                let temp = this.state.JSON_DATA[table];
+    
+                temp[index] = {...temp[index], [field]: value}
+    
+                this.setState({
+                    JSON_DATA: {
+                        ...this.state.JSON_DATA,
+                        [table]: temp
                     }
+                })
+            } else {
+                this.setState({
+                    JSON_DATA: {
+                        ...this.state.JSON_DATA,
+                        [table]: {
+                            ...this.state.JSON_DATA[table],
+                            [field]: value
+                        }
+                    }
+                })
+            }
+        } else{
+            this.setState({
+                JSON_DATA: {
+                    ...this.state.JSON_DATA,
+                    [table]: [...this.state.JSON_DATA[table], field]
                 }
-            })
+            }, () => this.forceUpdate())
         }
     }
 
@@ -423,21 +432,18 @@ class Articulo extends React.Component {
                 <Table data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
                     {
                         header: 'Código',
-                        class: 'GECL_ARUM_MEINH'
+                        class: 'GECL_ARUM_MEINH',
+                        pk: true
                     }, {
                         header: 'Nombre',
                         class: 'GECL_ARUM_UMREN',
-                        pk: false,
-                        disabled: false
+                        pk: true
                     }, {
                         header: 'Descripción',
-                        class: 'GECL_ARUM_UMREZ',
-                        pk: false
+                        class: 'GECL_ARUM_UMREZ'
                     }, {
                         header: 'País',
-                        class: 'GECL_ARUM_MSEHI',
-                        pk: false,
-                        disabled: true
+                        class: 'GECL_ARUM_MSEHI'
                     }, {
                         class: 'IND_TRANSC'
                     }
