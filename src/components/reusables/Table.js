@@ -8,7 +8,8 @@ class Table extends React.Component {
             readonly: this.props.readonly !== undefined ? this.props.readonly : '',
             fit: this.props.fit !== undefined ? this.props.fit : '',
             options: this.props.options,
-            data: this.props.data
+            data: this.props.data,
+            originData: []
         }
     }
 
@@ -34,9 +35,19 @@ class Table extends React.Component {
         }
     }
 
+    componentWillMount() {
+        let data = this.state.data;
+
+        this.setState({
+            originData: data
+        })
+        // El componente originData no debe actualizarse :v
+    }
+
     componentDidMount() {
         this.sortData(this.state.data);
     }
+
 
     componentWillReceiveProps() {
         this.sortData(this.props.data);
@@ -83,7 +94,20 @@ class Table extends React.Component {
                                                     value={this.state.data[i][f]}
                                                     style={this.state.options[ind]["header"] === undefined ? { display: "none" } : {}}
                                                     data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
-                                                    disabled={this.state.options[ind]["disabled"] !== undefined || this.state.option[ind]["pk"] !== undefined ? this.state.options[ind]["disabled"] || this.state.option[ind]["pk"] ? true : false : false}
+                                                    disabled={this.state.options[ind]["pk"] !== undefined
+                                                        ? (this.state.options[ind]["pk"]
+                                                            ? ((this.state.data[i][f] !== '' ? (this.state.originData[i] !== undefined ? (this.state.data[i][f] === this.state.originData[i][f] ? true : false) : i !== this.state.data.length - 1) : false)
+                                                                ? true
+                                                                : false)
+                                                            : (this.state.options[ind]["disabled"] !== undefined
+                                                                ? (this.state.options[ind]["disabled"]
+                                                                    ? true
+                                                                    : false)
+                                                                : false))
+                                                        : (this.state.options[ind]["disabled"] !== undefined
+                                                            ? (this.state.options[ind]["disabled"] ? true : false)
+                                                            : false)
+                                                    }
                                                     onChange={(x) => this.onFieldChange(x)} />
                                             </td>)
                                         })
@@ -145,11 +169,11 @@ class Table extends React.Component {
         if (keys.length) {
             let equals = 0;
 
-            let lastRowKeys = keys.map(x => { return (lastRow[x]+"").trim() });
+            let lastRowKeys = keys.map(x => { return (lastRow[x] + "").trim() });
 
             this.state.data.map((e, i) => {
                 if (i !== this.state.data.length - 1) {
-                    let currentRowKeys = keys.map(x => { return (e[x]+"").trim() });
+                    let currentRowKeys = keys.map(x => { return (e[x] + "").trim() });
 
                     if (JSON.stringify(lastRowKeys) == JSON.stringify(currentRowKeys)) {
                         equals++;
