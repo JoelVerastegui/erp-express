@@ -207,25 +207,38 @@ class Articulo extends React.Component {
 
     updateJSON(table, field, value, index) {
         if(typeof field == "string"){
-            if (index !== undefined) {
+            if(field !== "_REMOVE"){
+                if (index !== undefined) {
+                    let temp = this.state.JSON_DATA[table];
+        
+                    temp[index] = {...temp[index], [field]: value}
+        
+                    this.setState({
+                        JSON_DATA: {
+                            ...this.state.JSON_DATA,
+                            [table]: temp
+                        }
+                    })
+                } else {
+                    this.setState({
+                        JSON_DATA: {
+                            ...this.state.JSON_DATA,
+                            [table]: {
+                                ...this.state.JSON_DATA[table],
+                                [field]: value
+                            }
+                        }
+                    })
+                }
+            } else{
                 let temp = this.state.JSON_DATA[table];
-    
-                temp[index] = {...temp[index], [field]: value}
-    
+                delete temp[index];
+                temp = temp.filter(x => x !== undefined);
+
                 this.setState({
                     JSON_DATA: {
                         ...this.state.JSON_DATA,
                         [table]: temp
-                    }
-                })
-            } else {
-                this.setState({
-                    JSON_DATA: {
-                        ...this.state.JSON_DATA,
-                        [table]: {
-                            ...this.state.JSON_DATA[table],
-                            [field]: value
-                        }
                     }
                 })
             }
@@ -429,21 +442,21 @@ class Articulo extends React.Component {
         return (
             <Fragment>
                 <h1 className="h1">Organización Ventas 1</h1>
-                <Table data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
+                <Table readonly actions name="LST_GETB_MM_ARUM" data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
                     {
                         header: 'Código',
                         class: 'GECL_ARUM_MEINH',
                         pk: true
                     }, {
                         header: 'Nombre',
-                        class: 'GECL_ARUM_UMREN',
-                        pk: true
+                        class: 'GECL_ARUM_UMREN'
                     }, {
                         header: 'Descripción',
                         class: 'GECL_ARUM_UMREZ'
                     }, {
                         header: 'País',
-                        class: 'GECL_ARUM_MSEHI'
+                        class: 'GECL_ARUM_MSEHI',
+                        type: 'checkbox'
                     }, {
                         class: 'IND_TRANSC'
                     }
