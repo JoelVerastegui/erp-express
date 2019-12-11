@@ -18,7 +18,7 @@ class Articulo extends React.Component {
         super(props);
 
         this.state = {
-            loading: false,
+            loading: true,
             isMobile: 650,
             isTablet: 700,
             section: 1,
@@ -187,38 +187,52 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=GETB_MM_ARTI`)
-        //     .catch((err) => {
-        //         console.log(err);
-        //         return;
-        //     });
+        let tables = Object.keys(this.state.JSON_DATA);
+        tables = tables.map(e => {if(e.includes('GETB')) return e.substr(-12)});
+        tables = tables.filter(x => x !== undefined);
+        tables = [...new Set(tables)];
 
-        // if (res) {
-        //     let data = res.data;
+        let lstgetb = "";
 
-        //     if (data.V_TYPE_MESSAGE !== 'E') {
-        //         console.log(data);
-        //         this.setState({
-        //             VALIDATION: data,
-        //             loading: false
-        //         })
-        //     } else {
-        //         alert('Las credenciales son incorrectas.');
-        //     }
+        tables.forEach((e,i) => {
+            lstgetb += e;
+            if(i !== tables.length-1){
+                lstgetb += ',';
+            }
+        })
 
-        // } else {
-        //     alert('Error de conexión con el servidor.');
-        // }
+        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
+            .catch((err) => {
+                console.log(err);
+                return;
+            });
+
+        if (res) {
+            let data = res.data;
+
+            if (data.V_TYPE_MESSAGE !== 'E') {
+                console.log(data);
+                this.setState({
+                    VALIDATION: data,
+                    loading: false
+                })
+            } else {
+                alert('Error: ',data.MESSAGE);
+            }
+
+        } else {
+            alert('Error de conexión con el servidor.');
+        }
     }
 
     updateJSON(table, field, value, index) {
-        if(typeof field == "string"){
-            if(field !== "_REMOVE"){
+        if (typeof field == "string") {
+            if (field !== "_REMOVE") {
                 if (index !== undefined) {
                     let temp = this.state.JSON_DATA[table];
-        
-                    temp[index] = {...temp[index], [field]: value}
-        
+
+                    temp[index] = { ...temp[index], [field]: value }
+
                     this.setState({
                         JSON_DATA: {
                             ...this.state.JSON_DATA,
@@ -236,7 +250,7 @@ class Articulo extends React.Component {
                         }
                     })
                 }
-            } else{
+            } else {
                 let temp = this.state.JSON_DATA[table];
                 delete temp[index];
                 temp = temp.filter(x => x !== undefined);
@@ -248,7 +262,7 @@ class Articulo extends React.Component {
                     }
                 })
             }
-        } else{
+        } else {
             this.setState({
                 JSON_DATA: {
                     ...this.state.JSON_DATA,
@@ -521,12 +535,12 @@ class Articulo extends React.Component {
     render() {
         return (
             <Fragment>
-                {this.state.loading ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center"><img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" /></div>)
-                    : (
-                        this.content()
-                    )}
-
-
+                {this.state.loading 
+                    ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center">
+                            <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
+                       </div>)
+                    : (this.content())
+                }
             </Fragment>
         )
     }

@@ -31,8 +31,8 @@ class Table extends React.Component {
 
         let tableName = `LST_GETB_MM_${fieldName.substr(5, 4)}`;
 
-        let nodes = Array.prototype.slice.call(event.target.parentElement.parentElement.parentElement.children);
-        let row = event.target.parentElement.parentElement;
+        let nodes = Array.prototype.slice.call(event.target.parentElement.parentElement.parentElement.parentElement.children);
+        let row = event.target.parentElement.parentElement.parentElement;
         let fieldIndex = nodes.indexOf(row);
 
         if (this.props.onChange != undefined) {

@@ -81,23 +81,23 @@
     "LST_GETB_MM_ARUM": [
         {
             "GECL_ARUM_MEINH": "A020",
-            "GECL_ARUM_UMREN": "Artículo 20",
-            "GECL_ARUM_UMREZ": "Descripcion breve",
+            "GECL_ARUM_UMREN": "Art01",
+            "GECL_ARUM_UMREZ": "Dsc20",
             "GECL_ARUM_MSEHI": "Perú",
             "IND_TRANSC": "U"
         },
         {
             "GECL_ARUM_MEINH": "A021",
-            "GECL_ARUM_UMREZ": "Descripcion breve 3",
-            "GECL_ARUM_UMREN": "Artículo 21",
+            "GECL_ARUM_UMREZ": "Dsc01",
+            "GECL_ARUM_UMREN": "Art21",
             "GECL_ARUM_MSEHI": "X",
             "IND_TRANSC": "U"
         },
         {
-            "GECL_ARUM_UMREZ": "Descripcion breve 4",
+            "GECL_ARUM_UMREZ": "Dsc04",
             "GECL_ARUM_MSEHI": "Perú",
             "GECL_ARUM_MEINH": "A022",
-            "GECL_ARUM_UMREN": "Artículo 22",
+            "GECL_ARUM_UMREN": "Art22",
             "IND_TRANSC": "U"
         }
     ],
