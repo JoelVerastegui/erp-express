@@ -137,6 +137,12 @@ class Articulo extends React.Component {
                 GECL_DOMI_DATATYPE: "char",
                 GECL_DOMI_LENG: 20,
                 GECL_CAMP_NAME: "GECL_ARTI_NUMTP"
+            },
+            {
+                GECL_ELDA_SHLPNAME: "Código Artículo",
+                GECL_DOMI_DATATYPE: "char",
+                GECL_DOMI_LENG: 4,
+                GECL_CAMP_NAME: "GECL_ARUM_MEINH"
             }],
             data: [
                 {
@@ -442,14 +448,16 @@ class Articulo extends React.Component {
         return (
             <Fragment>
                 <h1 className="h1">Organización Ventas 1</h1>
-                <Table readonly actions name="LST_GETB_MM_ARUM" data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
+                <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
                     {
                         header: 'Código',
                         class: 'GECL_ARUM_MEINH',
-                        pk: true
+                        pk: true,
+                        matchcode: "GECL_AREM_UMREZ"
                     }, {
                         header: 'Nombre',
-                        class: 'GECL_ARUM_UMREN'
+                        class: 'GECL_ARUM_UMREN',
+                        matchcode: "GECL_AREM_UMRAN"
                     }, {
                         header: 'Descripción',
                         class: 'GECL_ARUM_UMREZ'

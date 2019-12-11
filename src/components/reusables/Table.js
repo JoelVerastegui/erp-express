@@ -8,10 +8,12 @@ class Table extends React.Component {
             name: this.props.name !== undefined ? this.props.name : '',
             actions: this.props.actions !== undefined ? this.props.actions : '',
             readonly: this.props.readonly !== undefined ? this.props.readonly : '',
+            validation: this.props.validation !== undefined ? this.props.validation : [],
             fit: this.props.fit !== undefined ? this.props.fit : '',
             options: this.props.options,
             selected: undefined,
             data: this.props.data,
+            mcActive: undefined,
             originData: []
         }
     }
@@ -100,10 +102,10 @@ class Table extends React.Component {
 
     editableTable() {
         return (
-            <table className={this.state.name + " table table-bordered"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
+            <table className={this.state.name + " table table-bordered table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
                 <thead className="thead-light">
                     <tr>
-                        <th></th>
+                        <th style={{width:"38px"}}></th>
                         {
                             this.state.options.map((e, i) => {
                                 if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
@@ -120,27 +122,40 @@ class Table extends React.Component {
                                     {
                                         Object.keys(e).map((f, ind) => {
                                             return (<td className={(this.state.options[ind]["header"] === undefined ? "d-none " : "") + "p-0" + (this.state.options[ind]["type"] !== undefined ? (this.state.selected === i && this.state.options[ind]["type"] === 'checkbox' ? " bg-secondary text-white" : "") : "")} style={this.state.options[ind]["type"] === 'checkbox' ? { display: "flex", justifyContent: "center", alignItems: "center" } : {}} key={ind}>
-                                                <input className={f + " form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
-                                                    type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
-                                                    value={this.state.data[i][f]}
-                                                    style={this.state.options[ind]["header"] === undefined ? ({ display: "none" }) : (this.state.options[ind]["type"] !== undefined ? (this.state.options[ind]["type"] === 'checkbox' ? { width: "25px", height: "36px" } : {}) : {})}
-                                                    data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
-                                                    disabled={this.state.options[ind]["pk"] !== undefined
-                                                        ? (this.state.options[ind]["pk"]
-                                                            ? ((this.state.data[i][f] !== '' ? (this.state.originData[i] !== undefined ? (this.state.data[i][f] === this.state.originData[i][f] ? true : false) : (i !== this.state.data.length - 1)) : false)
-                                                                ? true
-                                                                : false)
-                                                            : (this.state.options[ind]["disabled"] !== undefined
-                                                                ? (this.state.options[ind]["disabled"]
+                                                <div className="d-flex">
+                                                    <input className={f + " form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
+                                                        type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
+                                                        value={this.state.data[i][f]}
+                                                        checked={this.state.data[i][f] === 'X' ? true : false}
+                                                        style={this.state.options[ind]["header"] === undefined ? ({ display: "none" }) : (this.state.options[ind]["type"] !== undefined ? (this.state.options[ind]["type"] === 'checkbox' ? { width: "25px", height: "36px" } : {}) : {})}
+                                                        data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
+                                                        disabled={this.state.options[ind]["pk"] !== undefined
+                                                            ? (this.state.options[ind]["pk"]
+                                                                ? ((this.state.data[i][f] !== '' ? (this.state.originData[i] !== undefined ? (this.state.data[i][f] === this.state.originData[i][f] ? true : false) : (i !== this.state.data.length - 1)) : false)
                                                                     ? true
                                                                     : false)
-                                                                : false))
-                                                        : (this.state.options[ind]["disabled"] !== undefined
-                                                            ? (this.state.options[ind]["disabled"] ? true : false)
-                                                            : false)
+                                                                : (this.state.options[ind]["disabled"] !== undefined
+                                                                    ? (this.state.options[ind]["disabled"]
+                                                                        ? true
+                                                                        : false)
+                                                                    : false))
+                                                            : (this.state.options[ind]["disabled"] !== undefined
+                                                                ? (this.state.options[ind]["disabled"] ? true : false)
+                                                                : false)
+                                                        }
+                                                        placeholder={this.state.options[ind]["pk"] !== undefined ? "Campo clave" : ""}
+                                                        maxLength={this.state.validation.find(x => x.GECL_CAMP_NAME === f) !== undefined 
+                                                            ? this.state.validation.find(x => x.GECL_CAMP_NAME === f)["GECL_DOMI_LENG"]
+                                                            : ""}
+                                                        onChange={(x) => this.onFieldChange(x)}
+                                                        onFocus={(e) => {!e.target.disabled && this.state.options[ind]["matchcode"] !== undefined ? this.setState({mcActive: {row:i,col:ind}}) : this.setState({mcActive: undefined})}} />
+
+                                                    {
+                                                        this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) && 
+                                                            (<input type="button" className={this.state.options[ind]["matchcode"] + " btn btn-outline-secondary"} value="MC" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />)
                                                     }
-                                                    placeholder={this.state.options[ind]["pk"] !== undefined ? "Campo clave" : ""}
-                                                    onChange={(x) => this.onFieldChange(x)} />
+                                                    
+                                                </div>
                                             </td>)
                                         })
                                     }
@@ -155,9 +170,10 @@ class Table extends React.Component {
 
     readonlyTable() {
         return (
-            <table className="table table-bordered table-hover" style={this.state.fit !== '' ? { width: "auto" } : {}}>
+            <table className={"table table-bordered table-hover table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
                 <thead className="thead-light">
                     <tr>
+                        <th style={{width:"38px"}}></th>
                         {
                             this.state.options.map((e, i) => {
                                 if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
@@ -170,9 +186,15 @@ class Table extends React.Component {
                         this.state.data.map((e, i) => {
                             return (
                                 <tr key={i}>
+                                    <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
                                     {
                                         Object.keys(e).map((f, ind) => {
                                             return (<td key={ind}
+                                                className={(this.state.options[ind]["type"] !== undefined
+                                                    ? (this.state.options[ind]["type"] === 'checkbox'
+                                                        ? "p-0"
+                                                        : "")
+                                                    : "") + (this.state.selected === i ? " bg-secondary text-white" : "")}
                                                 style={this.state.options[ind]["header"] === undefined 
                                                     ? { display: "none" } 
                                                     : (this.state.options[ind]["type"] !== undefined 
@@ -364,8 +386,6 @@ class Table extends React.Component {
                         </div>
                     )
                 }
-
-
             </Fragment>
         )
     }
