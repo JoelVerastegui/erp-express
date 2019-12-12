@@ -18,11 +18,12 @@ class Articulo extends React.Component {
         super(props);
 
         this.state = {
-            loading: false,
+            loading: true,
             isMobile: 650,
             isTablet: 700,
             section: 1,
             tab: 1,
+            lastInputFocused: undefined,
             JSON_DATA: JSON_STRUCTURE,
             VALIDATION: [{
                 GECL_ELDA_SHLPNAME: "UMB",
@@ -144,6 +145,7 @@ class Articulo extends React.Component {
                 GECL_DOMI_LENG: 4,
                 GECL_CAMP_NAME: "GECL_ARUM_MEINH"
             }],
+            MATCHCODE: [],
             data: [
                 {
                     "CODIGO": "c006",
@@ -176,6 +178,30 @@ class Articulo extends React.Component {
                 {
                     "CODIGO": "RCC1",
                     "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
+                },
+                {
+                    "CODIGO": "RCC1",
+                    "DESCRIPCION": "Centro San Isidro"
                 }
             ]
         }
@@ -187,42 +213,102 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        // let tables = Object.keys(this.state.JSON_DATA);
-        // tables = tables.map(e => {if(e.includes('GETB')) return e.substr(-12)});
-        // tables = tables.filter(x => x !== undefined);
-        // tables = [...new Set(tables)];
+        let tables = Object.keys(this.state.JSON_DATA);
+        tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
+        tables = tables.filter(x => x !== undefined);
+        tables = [...new Set(tables)];
 
-        // let lstgetb = "";
+        let lstgetb = "";
 
-        // tables.forEach((e,i) => {
-        //     lstgetb += e;
-        //     if(i !== tables.length-1){
-        //         lstgetb += ',';
-        //     }
-        // })
+        tables.forEach((e, i) => {
+            lstgetb += e;
+            if (i !== tables.length - 1) {
+                lstgetb += ',';
+            }
+        })
 
-        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
-        //     .catch((err) => {
-        //         console.log(err);
-        //         return;
-        //     });
 
-        // if (res) {
-        //     let data = res.data;
+        /* ===== VALIDATION ===== */
+        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
+            .catch((err) => {
+                console.log(err);
+                return;
+            });
 
-        //     if (data.V_TYPE_MESSAGE !== 'E') {
-        //         console.log(data);
-        //         this.setState({
-        //             VALIDATION: data,
-        //             loading: false
-        //         })
-        //     } else {
-        //         alert('Error: ',data.MESSAGE);
-        //     }
+        if (res) {
+            let data = res.data;
 
-        // } else {
-        //     alert('Error de conexión con el servidor.');
-        // }
+            if (data.V_TYPE_MESSAGE !== 'E') {
+                console.log(data);
+                this.setState({
+                    VALIDATION: data
+                })
+            } else {
+                alert('Error: ', data.MESSAGE);
+                return;
+            }
+
+        } else {
+            alert('Error de conexión con el servidor.');
+            return;
+        }
+
+
+
+        /* ===== MATCHCODES ===== */
+        
+    }
+
+    async getMatchcodes(){
+        let mcElements = [...document.getElementsByClassName('MC')];
+
+        let mcClasses = mcElements.map(f => { return (f.className.split(' ').find(x => x.startsWith('GECL')).substr(5, 4)) });
+
+        mcClasses = [...new Set(mcClasses)]; // Remove duplicates
+
+        let mcState = this.state.MATCHCODE;
+
+        if(mcState.length){
+            mcClasses = mcClasses.filter(x => mcState.find(f => f.TABLA.substr(6,4) === x) === undefined);
+        }
+
+        if(mcClasses.length){
+            let MATCHCODE = [];
+
+            for (let i = 0; i < mcClasses.length; i++) {
+                let data = {
+                    GROUP_MANDT: "100",
+                    GROUP_MC: `GETB_MM_${mcClasses[i]}`,
+                    GROUP_CBO: []
+                }
+    
+                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`,data)
+                .catch((err) => {
+                    console.log(err);
+                    return;
+                });
+    
+                if (res) {
+                    let data2 = res.data;
+        
+                    if (data2.V_TYPE_MESSAGE !== 'E') {
+                        MATCHCODE.push(data2["VSC_DATA"]);
+                    } else {
+                        alert('Error: ', data2.MESSAGE);
+                        return;
+                    }
+        
+                } else {
+                    alert('Error de conexión con el servidor.');
+                    return;
+                }
+            }
+    
+            this.setState({
+                MATCHCODE: [...this.state.MATCHCODE, MATCHCODE],
+                loading: false
+            });
+        }
     }
 
     updateJSON(table, field, value, index) {
@@ -398,7 +484,7 @@ class Articulo extends React.Component {
             <Fragment>
                 <Article class="d-flex flex-wrap flex-column">
                     <SubTitle title="Datos Generales" />
-                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" changeFocus={(e) => { this.setState({ lastInputFocused: e }) }} />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GRME_MATKL" />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BISMT")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BISMT"]} onChange={this.updateJSON.bind(this)} />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_EXTWG")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_EXTWG"]} onChange={this.updateJSON.bind(this)} />
@@ -509,6 +595,16 @@ class Articulo extends React.Component {
         )
     }
 
+    setSelectedModalValue(e) {
+        let field = this.state.lastInputFocused.className.split(' ').find(x => x.startsWith('GECL'));
+
+        let table = `GETB_MM_${field.substr(5, 4)}`;
+
+        let value = e;
+
+        this.updateJSON(table, field, value);
+    }
+
     content = () => {
         return (
             <Fragment>
@@ -518,25 +614,17 @@ class Articulo extends React.Component {
                 {this.state.section === 4 && this.section4()}
 
                 <Modal title="Modal de prueba">
-                    <Article>
-                        <h1 className="h1">PRUEBA1</h1>
-                        <hr />
-                        <p>Contenido</p>
-                    </Article>
-                    <Article>
-                        <Table readonly name="LST_GETB_MM_ARUM" data={this.state.data} options={[
-                            {
-                                header: 'Código',
-                                class: 'GECL_ARUM_MEINH',
-                                pk: true
-                            }, {
-                                header: 'Nombre',
-                                class: 'GECL_ARUM_UMREN'
-                            }
-                        ]} />
-                        <input type="button" className="btn btn-success" value="Confirmar" />
-                        <input type="button" className="btn btn-danger" value="Cancelar" />
-                    </Article>
+                    <Table matchcode readonly data={this.state.data} changeLastInput={(e) => { this.setSelectedModalValue(e) }} options={[
+                        {
+                            header: 'Código',
+                            class: 'CODIGO',
+                            pk: true
+                        },
+                        {
+                            header: 'Descripción',
+                            class: 'DESCRIPCION'
+                        }
+                    ]} />
                 </Modal>
             </Fragment>
         )

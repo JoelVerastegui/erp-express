@@ -103,122 +103,216 @@ class Table extends React.Component {
 
     editableTable() {
         return (
-            <table className={this.state.name + " table table-bordered table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
-                <thead className="thead-light">
-                    <tr>
-                        <th style={{width:"38px"}}></th>
+            <div className="overflow-auto" style={{ maxHeight: "230px" }}>
+                <table className={this.state.name + " table table-bordered table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
+                    <thead className="thead-light">
+                        <tr>
+                            <th className="sticky-top" style={{ width: "38px", top: "-1px" }}></th>
+                            {
+                                this.state.options.map((e, i) => {
+                                    if (e.header !== undefined) return (<th key={i} className="sticky-top" style={{ top: "-1px" }}>{e.header}</th>)
+                                })
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
                         {
-                            this.state.options.map((e, i) => {
-                                if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
-                            })
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        this.state.data.map((e, i) => {
-                            return (
-                                <tr key={i}>
-                                    <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
-                                    {
-                                        Object.keys(e).map((f, ind) => {
-                                            return (<td className={(this.state.options[ind]["header"] === undefined ? "d-none " : "") + "p-0" + (this.state.options[ind]["type"] !== undefined ? (this.state.selected === i && this.state.options[ind]["type"] === 'checkbox' ? " bg-secondary text-white" : "") : "")} style={this.state.options[ind]["type"] === 'checkbox' ? { display: "flex", justifyContent: "center", alignItems: "center" } : {}} key={ind}>
-                                                <div className="d-flex">
-                                                    <input className={f + " form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
-                                                        type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
-                                                        value={this.state.data[i][f]}
-                                                        checked={this.state.data[i][f] === 'X' ? true : false}
-                                                        style={this.state.options[ind]["header"] === undefined ? ({ display: "none" }) : (this.state.options[ind]["type"] !== undefined ? (this.state.options[ind]["type"] === 'checkbox' ? { width: "25px", height: "36px" } : {}) : {})}
-                                                        data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
-                                                        disabled={this.state.options[ind]["pk"] !== undefined
-                                                            ? (this.state.options[ind]["pk"]
-                                                                ? ((this.state.data[i][f] !== '' ? (this.state.originData[i] !== undefined ? (this.state.data[i][f] === this.state.originData[i][f] ? true : false) : (i !== this.state.data.length - 1)) : false)
-                                                                    ? true
-                                                                    : false)
-                                                                : (this.state.options[ind]["disabled"] !== undefined
-                                                                    ? (this.state.options[ind]["disabled"]
+                            this.state.data.map((e, i) => {
+                                return (
+                                    <tr key={i}>
+                                        <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
+                                        {
+                                            Object.keys(e).map((f, ind) => {
+                                                return (<td className={(this.state.options[ind]["header"] === undefined ? "d-none " : "") + "p-0" + (this.state.options[ind]["type"] !== undefined ? (this.state.selected === i && this.state.options[ind]["type"] === 'checkbox' ? " bg-secondary text-white" : "") : "")} style={this.state.options[ind]["type"] === 'checkbox' ? { display: "flex", justifyContent: "center", alignItems: "center" } : {}} key={ind}>
+                                                    <div className="d-flex">
+                                                        <input className={f + " form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
+                                                            type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
+                                                            value={this.state.data[i][f]}
+                                                            checked={this.state.data[i][f] === 'X' ? true : false}
+                                                            style={this.state.options[ind]["header"] === undefined ? ({ display: "none" }) : (this.state.options[ind]["type"] !== undefined ? (this.state.options[ind]["type"] === 'checkbox' ? { width: "25px", height: "36px" } : {}) : {})}
+                                                            data-pk={this.state.options[ind]["pk"] !== undefined ? this.state.options[ind]["pk"] ? true : false : ''}
+                                                            disabled={this.state.options[ind]["pk"] !== undefined
+                                                                ? (this.state.options[ind]["pk"]
+                                                                    ? ((this.state.data[i][f] !== '' ? (this.state.originData[i] !== undefined ? (this.state.data[i][f] === this.state.originData[i][f] ? true : false) : (i !== this.state.data.length - 1)) : false)
                                                                         ? true
                                                                         : false)
-                                                                    : false))
-                                                            : (this.state.options[ind]["disabled"] !== undefined
-                                                                ? (this.state.options[ind]["disabled"] ? true : false)
-                                                                : false)
-                                                        }
-                                                        placeholder={this.state.options[ind]["pk"] !== undefined ? "Campo clave" : ""}
-                                                        maxLength={this.state.validation.find(x => x.GECL_CAMP_NAME === f) !== undefined 
-                                                            ? this.state.validation.find(x => x.GECL_CAMP_NAME === f)["GECL_DOMI_LENG"]
-                                                            : ""}
-                                                        onChange={(x) => this.onFieldChange(x)}
-                                                        onFocus={(e) => {!e.target.disabled && this.state.options[ind]["matchcode"] !== undefined ? this.setState({mcActive: {row:i,col:ind}}) : this.setState({mcActive: undefined})}} />
+                                                                    : (this.state.options[ind]["disabled"] !== undefined
+                                                                        ? (this.state.options[ind]["disabled"]
+                                                                            ? true
+                                                                            : false)
+                                                                        : false))
+                                                                : (this.state.options[ind]["disabled"] !== undefined
+                                                                    ? (this.state.options[ind]["disabled"] ? true : false)
+                                                                    : false)
+                                                            }
+                                                            placeholder={this.state.options[ind]["pk"] !== undefined ? "Campo clave" : ""}
+                                                            maxLength={this.state.validation.find(x => x.GECL_CAMP_NAME === f) !== undefined
+                                                                ? this.state.validation.find(x => x.GECL_CAMP_NAME === f)["GECL_DOMI_LENG"]
+                                                                : ""}
+                                                            onChange={(x) => this.onFieldChange(x)}
+                                                            onFocus={(e) => { !e.target.disabled && this.state.options[ind]["matchcode"] !== undefined ? this.setState({ mcActive: { row: i, col: ind } }) : this.setState({ mcActive: undefined }) }} />
 
-                                                    {
-                                                        this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) && 
+                                                        {
+                                                            this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) &&
                                                             (<input type="button" className={this.state.options[ind]["matchcode"] + " btn btn-outline-secondary"} value="MC" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />)
-                                                    }
-                                                    
-                                                </div>
-                                            </td>)
-                                        })
-                                    }
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
+                                                        }
+
+                                                    </div>
+                                                </td>)
+                                            })
+                                        }
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
         )
     }
 
     readonlyTable() {
         return (
-            <table className={"table table-bordered table-hover table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
-                <thead className="thead-light">
-                    <tr>
-                        <th style={{width:"38px"}}></th>
+            <div className="overflow-auto" style={{ maxHeight: "230px" }}>
+                <table className={"table table-bordered table-hover table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
+                    <thead className="thead-light">
+                        <tr>
+                            <th className="sticky-top" style={{ width: "38px", top: "-1px" }}></th>
+                            {
+                                this.state.options.map((e, i) => {
+                                    if (e.header !== undefined) return (<th key={i} className="sticky-top" style={{ top: "-1px" }}>{e.header}</th>)
+                                })
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
                         {
-                            this.state.options.map((e, i) => {
-                                if (e.header !== undefined) return (<th key={i}>{e.header}</th>)
+                            this.state.data.map((e, i) => {
+                                return (
+                                    <tr key={i}>
+                                        <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
+                                        {
+                                            Object.keys(e).map((f, ind) => {
+                                                return (<td key={ind}
+                                                    className={(this.state.options[ind]["type"] !== undefined
+                                                        ? (this.state.options[ind]["type"] === 'checkbox'
+                                                            ? "p-0"
+                                                            : "")
+                                                        : "") + (this.state.selected === i ? " bg-secondary text-white" : "")}
+                                                    style={this.state.options[ind]["header"] === undefined
+                                                        ? { display: "none" }
+                                                        : (this.state.options[ind]["type"] !== undefined
+                                                            ? (this.state.options[ind]["type"] === 'checkbox'
+                                                                ? { display: "flex", justifyContent: "center", alignItems: "center" }
+                                                                : {})
+                                                            : {})}>
+                                                    {this.state.options[ind]["type"] !== undefined
+                                                        ? (this.state.options[ind]["type"] === 'checkbox'
+                                                            ? (<input type="checkbox" style={{ width: "25px", height: "36px" }} checked={this.state.data[i][f] === 'X' ? true : false} disabled />)
+                                                            : e[f])
+                                                        : e[f]
+                                                    }
+                                                </td>)
+                                            })
+                                        }
+                                    </tr>
+                                )
                             })
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        this.state.data.map((e, i) => {
-                            return (
-                                <tr key={i}>
-                                    <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
-                                    {
-                                        Object.keys(e).map((f, ind) => {
-                                            return (<td key={ind}
-                                                className={(this.state.options[ind]["type"] !== undefined
-                                                    ? (this.state.options[ind]["type"] === 'checkbox'
-                                                        ? "p-0"
-                                                        : "")
-                                                    : "") + (this.state.selected === i ? " bg-secondary text-white" : "")}
-                                                style={this.state.options[ind]["header"] === undefined 
-                                                    ? { display: "none" } 
-                                                    : (this.state.options[ind]["type"] !== undefined 
-                                                        ? (this.state.options[ind]["type"] === 'checkbox' 
-                                                            ? { display: "flex", justifyContent: "center", alignItems: "center" }
-                                                            : {}) 
-                                                        : {})}>
-                                                {this.state.options[ind]["type"] !== undefined
-                                                    ? (this.state.options[ind]["type"] === 'checkbox'
-                                                        ? (<input type="checkbox" style={{width: "25px", height: "36px"}} checked={this.state.data[i][f] === 'X' ? true : false} disabled/>)
-                                                        : e[f])
-                                                    : e[f]
-                                                }
-                                            </td>)
-                                        })
-                                    }
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         )
+    }
+
+    matchcodeTable() {
+        return (
+            <Fragment>
+                <input className="form-control" placeholder="Buscar..." onChange={(e) => this.searchCode(e.target)} />
+                <div className="overflow-auto my-2" style={{ maxHeight: "230px" }}>
+                    <table className={"table table-bordered table-hover table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
+                        <thead className="thead-light">
+                            <tr>
+                                <th className="sticky-top" style={{ width: "38px", top: "-1px" }}></th>
+                                <th className="sticky-top" style={{ top: "-1px" }}>Código</th>
+                                <th className="sticky-top" style={{ top: "-1px" }}>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.data.map((e, i) => {
+                                    return (
+                                        <tr key={i}>
+                                            <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
+                                            {
+                                                Object.keys(e).map((f, ind) => {
+                                                    return (<td key={ind} className={this.state.selected === i ? "bg-secondary text-white" : ""}>{e[f]}</td>)
+                                                })
+                                            }
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
+                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={(e) => { this.cleanMatchcodeTable(e) }} />
+                </div>
+            </Fragment>
+        )
+    }
+
+    sendCode(event) {
+        if (this.state.selected !== undefined) {
+            if (event.target.dataset.dismiss !== undefined) {
+                let code = event.target.parentElement.previousSibling // div
+                    .children[0] // table
+                    .children[1] // tbody
+                    .children[this.state.selected] // selected tr
+                    .children[1] // td
+                    .innerText; // code
+
+                this.props.changeLastInput(code);
+                event.target.removeAttribute('data-dismiss', 'modal');
+                this.cleanMatchcodeTable(event);
+            } else {
+                event.target.setAttribute('data-dismiss', 'modal');
+                event.target.click();
+            }
+        } else {
+            event.preventDefault();
+            event.stopPropagation();
+            alert('Debe seleccionar un registro.');
+        }
+    }
+
+    cleanMatchcodeTable(e) {
+        e.target.parentElement.parentElement.children[0].value = '';
+        this.searchCode(e.target.parentElement.parentElement.children[0]);
+        this.setState({ selected: undefined });
+    }
+
+    searchCode(event) {
+        var input, filter, table, tr, td, td2, i, txtValue, txtValue2;
+        input = event;
+        filter = input.value.toUpperCase();
+        table = input.nextSibling.children[0]; // table
+        tr = table.children[1].getElementsByTagName("tr"); // tbody tr
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            td2 = tr[i].getElementsByTagName("td")[2];
+            if (td || td2) {
+                txtValue = td.textContent || td.innerText;
+                txtValue2 = td2.textContent || td2.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 
     validation(event) {
@@ -372,9 +466,7 @@ class Table extends React.Component {
         }
     }
 
-    matchcodeTable(){
 
-    }
 
     render() {
         return (

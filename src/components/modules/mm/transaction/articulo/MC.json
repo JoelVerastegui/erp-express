@@ -1,0 +1,138 @@
+[
+    {
+        "VSC_DATA": [
+            {
+                "GETB_MM_CENT": [
+                    {
+                        "CODIGO": "c006",
+                        "DESCRIPCION": "4"
+                    },
+                    {
+                        "CODIGO": "c007",
+                        "DESCRIPCION": "Prueba"
+                    },
+                    {
+                        "CODIGO": "CTR ",
+                        "DESCRIPCION": "Centro1"
+                    },
+                    {
+                        "CODIGO": "CTR2",
+                        "DESCRIPCION": "CENT1"
+                    },
+                    {
+                        "CODIGO": "CTR3",
+                        "DESCRIPCION": "Cent1"
+                    },
+                    {
+                        "CODIGO": "GRE2",
+                        "DESCRIPCION": "EBIM MATRIZ 2"
+                    },
+                    {
+                        "CODIGO": "OML1",
+                        "DESCRIPCION": "OML CENTRO 1"
+                    },
+                    {
+                        "CODIGO": "RCC1",
+                        "DESCRIPCION": "Centro San Isidro"
+                    }
+                ],
+                "TABLA": "MC_MM_CENT",
+                "TITULO": "Centros"
+            }
+        ]
+    },
+    {
+        "TABLA": "MC_MM_ARTI",
+        "GETB_MM_ARTI": [
+            {
+                "CODIGO": "1",
+                "DESCRIPCION": "BOLIG FAB 2022-M RETRAC C/GRIP"
+            },
+            {
+                "CODIGO": "2",
+                "DESCRIPCION": "BOLIG FAB 2022-M RETRAC C/GRIP"
+            },
+            {
+                "CODIGO": "3",
+                "DESCRIPCION": "REGLA 30 CM TRANSP ARTESCO              "
+            },
+            {
+                "CODIGO": "4",
+                "DESCRIPCION": "REGLA 30 CM TRANSP ARTESCO              "
+            },
+            {
+                "CODIGO": "4003",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4004",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4005",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4005",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4006",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4007",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4008",
+                "DESCRIPCION": "Polistel 1"
+            },
+            {
+                "CODIGO": "4009",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4010",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4011",
+                "DESCRIPCION": "Polistel"
+            },
+            {
+                "CODIGO": "4012",
+                "DESCRIPCION": "REGLA 30 CM TRANSP ARTESCO              "
+            },
+            {
+                "CODIGO": "4013",
+                "DESCRIPCION": "Material Ejemplo 1"
+            },
+            {
+                "CODIGO": "4014",
+                "DESCRIPCION": "Material Ejemplo 1"
+            },
+            {
+                "CODIGO": "5",
+                "DESCRIPCION": "CRAYONES LARGOS X 12 FAB"
+            },
+            {
+                "CODIGO": "6",
+                "DESCRIPCION": "CRAYONES LARGOS X 12 FAB"
+            },
+            {
+                "CODIGO": "7",
+                "DESCRIPCION": "Articulo Prueba"
+            },
+            {
+                "CODIGO": "8",
+                "DESCRIPCION": "FORRO OF VINIFAN"
+            },
+            {
+                "CODIGO": "A",
+                "DESCRIPCION": "o"
+            }
+        ],
+        "TITULO": "Articulos"
+    }
+]
