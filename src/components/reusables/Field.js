@@ -127,7 +127,7 @@ function Field(props) {
                             {
                                 matchcode !== '' &&
                                 <div className="input-group-append">
-                                    <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" />
+                                    <input type="button" className={matchcode + " btn btn-outline-secondary"} value="MC" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />
                                 </div>
                             }
                         </div>

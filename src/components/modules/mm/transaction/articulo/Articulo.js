@@ -18,7 +18,7 @@ class Articulo extends React.Component {
         super(props);
 
         this.state = {
-            loading: true,
+            loading: false,
             isMobile: 650,
             isTablet: 700,
             section: 1,
@@ -187,42 +187,42 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        let tables = Object.keys(this.state.JSON_DATA);
-        tables = tables.map(e => {if(e.includes('GETB')) return e.substr(-12)});
-        tables = tables.filter(x => x !== undefined);
-        tables = [...new Set(tables)];
+        // let tables = Object.keys(this.state.JSON_DATA);
+        // tables = tables.map(e => {if(e.includes('GETB')) return e.substr(-12)});
+        // tables = tables.filter(x => x !== undefined);
+        // tables = [...new Set(tables)];
 
-        let lstgetb = "";
+        // let lstgetb = "";
 
-        tables.forEach((e,i) => {
-            lstgetb += e;
-            if(i !== tables.length-1){
-                lstgetb += ',';
-            }
-        })
+        // tables.forEach((e,i) => {
+        //     lstgetb += e;
+        //     if(i !== tables.length-1){
+        //         lstgetb += ',';
+        //     }
+        // })
 
-        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
-            .catch((err) => {
-                console.log(err);
-                return;
-            });
+        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
+        //     .catch((err) => {
+        //         console.log(err);
+        //         return;
+        //     });
 
-        if (res) {
-            let data = res.data;
+        // if (res) {
+        //     let data = res.data;
 
-            if (data.V_TYPE_MESSAGE !== 'E') {
-                console.log(data);
-                this.setState({
-                    VALIDATION: data,
-                    loading: false
-                })
-            } else {
-                alert('Error: ',data.MESSAGE);
-            }
+        //     if (data.V_TYPE_MESSAGE !== 'E') {
+        //         console.log(data);
+        //         this.setState({
+        //             VALIDATION: data,
+        //             loading: false
+        //         })
+        //     } else {
+        //         alert('Error: ',data.MESSAGE);
+        //     }
 
-        } else {
-            alert('Error de conexión con el servidor.');
-        }
+        // } else {
+        //     alert('Error de conexión con el servidor.');
+        // }
     }
 
     updateJSON(table, field, value, index) {
@@ -524,6 +524,16 @@ class Articulo extends React.Component {
                         <p>Contenido</p>
                     </Article>
                     <Article>
+                        <Table readonly name="LST_GETB_MM_ARUM" data={this.state.data} options={[
+                            {
+                                header: 'Código',
+                                class: 'GECL_ARUM_MEINH',
+                                pk: true
+                            }, {
+                                header: 'Nombre',
+                                class: 'GECL_ARUM_UMREN'
+                            }
+                        ]} />
                         <input type="button" className="btn btn-success" value="Confirmar" />
                         <input type="button" className="btn btn-danger" value="Cancelar" />
                     </Article>
@@ -535,10 +545,10 @@ class Articulo extends React.Component {
     render() {
         return (
             <Fragment>
-                {this.state.loading 
+                {this.state.loading
                     ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center">
-                            <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
-                       </div>)
+                        <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
+                    </div>)
                     : (this.content())
                 }
             </Fragment>

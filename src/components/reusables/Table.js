@@ -5,6 +5,7 @@ class Table extends React.Component {
         super(props);
 
         this.state = {
+            matchcode: this.props.matchcode !== undefined ? this.props.matchcode : '',
             name: this.props.name !== undefined ? this.props.name : '',
             actions: this.props.actions !== undefined ? this.props.actions : '',
             readonly: this.props.readonly !== undefined ? this.props.readonly : '',
@@ -371,14 +372,18 @@ class Table extends React.Component {
         }
     }
 
+    matchcodeTable(){
+
+    }
+
     render() {
         return (
             <Fragment>
                 {
-                    this.state.readonly !== '' ? this.readonlyTable() : this.editableTable()
+                    this.state.matchcode !== '' ? this.matchcodeTable() : (this.state.readonly !== '' ? this.readonlyTable() : this.editableTable())
                 }
                 {
-                    this.state.actions !== '' && this.state.readonly === '' &&
+                    this.state.actions !== '' && this.state.readonly === '' && this.state.matchcode === '' &&
                     (
                         <div className="d-flex">
                             <input type="button" className="btn btn-success mx-1" value="Agregar" onClick={(e) => { this.appendRow(e) }} />
