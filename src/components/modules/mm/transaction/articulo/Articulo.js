@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 
 import JSON_STRUCTURE from './Articulo.json';
+import MC_STRUCTURE from './MC.json';
 
 import { SERVER } from '../../../../../config/config';
 import Field from '../../../../reusables/Field';
@@ -18,7 +19,7 @@ class Articulo extends React.Component {
         super(props);
 
         this.state = {
-            loading: true,
+            loading: false,
             isMobile: 650,
             isTablet: 700,
             section: 1,
@@ -145,7 +146,10 @@ class Articulo extends React.Component {
                 GECL_DOMI_LENG: 4,
                 GECL_CAMP_NAME: "GECL_ARUM_MEINH"
             }],
-            MATCHCODE: [],
+            MATCHCODE: MC_STRUCTURE,
+            modalType: "modal",
+            selectedMatchcode: undefined,
+            tableIndex: undefined,
             data: [
                 {
                     "CODIGO": "c006",
@@ -213,53 +217,53 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        let tables = Object.keys(this.state.JSON_DATA);
-        tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
-        tables = tables.filter(x => x !== undefined);
-        tables = [...new Set(tables)];
+        // let tables = Object.keys(this.state.JSON_DATA);
+        // tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
+        // tables = tables.filter(x => x !== undefined);
+        // tables = [...new Set(tables)];
 
-        let lstgetb = "";
+        // let lstgetb = "";
 
-        tables.forEach((e, i) => {
-            lstgetb += e;
-            if (i !== tables.length - 1) {
-                lstgetb += ',';
-            }
-        })
-
-
-        /* ===== VALIDATION ===== */
-        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
-            .catch((err) => {
-                console.log(err);
-                return;
-            });
-
-        if (res) {
-            let data = res.data;
-
-            if (data.V_TYPE_MESSAGE !== 'E') {
-                console.log(data);
-                this.setState({
-                    VALIDATION: data
-                })
-            } else {
-                alert('Error: ', data.MESSAGE);
-                return;
-            }
-
-        } else {
-            alert('Error de conexión con el servidor.');
-            return;
-        }
+        // tables.forEach((e, i) => {
+        //     lstgetb += e;
+        //     if (i !== tables.length - 1) {
+        //         lstgetb += ',';
+        //     }
+        // })
 
 
+        // /* ===== VALIDATION ===== */
+        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
+        //     .catch((err) => {
+        //         console.log(err);
+        //         return;
+        //     });
 
-        /* ===== MATCHCODES ===== */
-        
+        // if (res) {
+        //     let data = res.data;
+
+        //     if (data.V_TYPE_MESSAGE !== 'E') {
+        //         console.log(data);
+        //         this.setState({
+        //             VALIDATION: data
+        //         })
+        //     } else {
+        //         alert('Error: ', data.MESSAGE);
+        //         return;
+        //     }
+
+        // } else {
+        //     alert('Error de conexión con el servidor.');
+        //     return;
+        // }
+
+
+
+        // /* ===== MATCHCODES ===== */
+        // this.getMatchcodes();
     }
 
-    async getMatchcodes(){
+    async getMatchcodes() {
         let mcElements = [...document.getElementsByClassName('MC')];
 
         let mcClasses = mcElements.map(f => { return (f.className.split(' ').find(x => x.startsWith('GECL')).substr(5, 4)) });
@@ -268,11 +272,11 @@ class Articulo extends React.Component {
 
         let mcState = this.state.MATCHCODE;
 
-        if(mcState.length){
-            mcClasses = mcClasses.filter(x => mcState.find(f => f.TABLA.substr(6,4) === x) === undefined);
+        if (mcState.length) {
+            mcClasses = mcClasses.filter(x => mcState.find(f => f.TABLA.substr(6, 4) === x) === undefined);
         }
 
-        if(mcClasses.length){
+        if (mcClasses.length) {
             let MATCHCODE = [];
 
             for (let i = 0; i < mcClasses.length; i++) {
@@ -281,29 +285,29 @@ class Articulo extends React.Component {
                     GROUP_MC: `GETB_MM_${mcClasses[i]}`,
                     GROUP_CBO: []
                 }
-    
-                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`,data)
-                .catch((err) => {
-                    console.log(err);
-                    return;
-                });
-    
+
+                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`, data)
+                    .catch((err) => {
+                        console.log(err);
+                        return;
+                    });
+
                 if (res) {
                     let data2 = res.data;
-        
+
                     if (data2.V_TYPE_MESSAGE !== 'E') {
                         MATCHCODE.push(data2["VSC_DATA"]);
                     } else {
                         alert('Error: ', data2.MESSAGE);
                         return;
                     }
-        
+
                 } else {
                     alert('Error de conexión con el servidor.');
                     return;
                 }
             }
-    
+
             this.setState({
                 MATCHCODE: [...this.state.MATCHCODE, MATCHCODE],
                 loading: false
@@ -419,7 +423,7 @@ class Articulo extends React.Component {
                 <Article class="d-flex flex-wrap p-3 justify-content-between align-items-center">
                     <h4 className="h4 text-muted font-weight-normal m-0">Articulo</h4>
                     <Article width="auto" class="d-flex justify-content-start">
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" value="Datos Adicionales" />
+                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
                     </Article>
@@ -484,8 +488,8 @@ class Articulo extends React.Component {
             <Fragment>
                 <Article class="d-flex flex-wrap flex-column">
                     <SubTitle title="Datos Generales" />
-                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" changeFocus={(e) => { this.setState({ lastInputFocused: e }) }} />
-                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GRME_MATKL" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_ARTI_MSEHI" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATKL")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATKL"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_CENT_MATKL" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BISMT")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BISMT"]} onChange={this.updateJSON.bind(this)} />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_EXTWG")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_EXTWG"]} onChange={this.updateJSON.bind(this)} />
                     <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_SPART")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_SPART"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_SECO_SPART" />
@@ -548,7 +552,7 @@ class Articulo extends React.Component {
         return (
             <Fragment>
                 <h1 className="h1">Organización Ventas 1</h1>
-                <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} options={[
+                <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }} options={[
                     {
                         header: 'Código',
                         class: 'GECL_ARUM_MEINH',
@@ -557,7 +561,7 @@ class Articulo extends React.Component {
                     }, {
                         header: 'Nombre',
                         class: 'GECL_ARUM_UMREN',
-                        matchcode: "GECL_AREM_UMRAN"
+                        matchcode: "GECL_CENT_UMRAN"
                     }, {
                         header: 'Descripción',
                         class: 'GECL_ARUM_UMREZ'
@@ -598,11 +602,52 @@ class Articulo extends React.Component {
     setSelectedModalValue(e) {
         let field = this.state.lastInputFocused.className.split(' ').find(x => x.startsWith('GECL'));
 
-        let table = `GETB_MM_${field.substr(5, 4)}`;
+        let table = this.state.tableIndex !== undefined ? `LST_GETB_MM_${field.substr(5, 4)}` : `GETB_MM_${field.substr(5, 4)}`;
 
         let value = e;
 
-        this.updateJSON(table, field, value);
+        if (this.state.tableIndex !== undefined) {
+            this.updateJSON(table, field, value, this.state.tableIndex);
+            this.setState({ tableIndex: undefined });
+        } else {
+            this.updateJSON(table, field, value);
+        }
+    }
+
+    renderMatchCode(lastInput, mcClass, index = undefined) {
+        if (mcClass) {
+            let data = this.state.MATCHCODE.find(x => x.TABLA.substr(6, 4) === mcClass.substr(5, 4));
+
+            if (data !== undefined) {
+                let title = data["TITULO"];
+                let GETB = Object.keys(data).find(x => x.startsWith('GETB'));
+                data = data[GETB];
+
+                this.setState({
+                    lastInputFocused: lastInput,
+                    selectedMatchcode: {
+                        title,
+                        data
+                    },
+                    tableIndex: index,
+                    modalType: "matchcode"
+                }, () => { this.forceUpdate() })
+            }
+        }
+    }
+
+    renderAditional() {
+        return (
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <SubTitle title="Datos Adicionales" />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BISMT")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BISMT"]} onChange={this.updateJSON.bind(this)}  matchcode="GECL_CENT_MATKL" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                    <Article class="d-flex justify-content-end">
+                        <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" />
+                    </Article>
+                </Article>
+            </Fragment>
+        )
     }
 
     content = () => {
@@ -613,18 +658,8 @@ class Articulo extends React.Component {
                 {this.state.section === 3 && this.section3()}
                 {this.state.section === 4 && this.section4()}
 
-                <Modal title="Modal de prueba">
-                    <Table matchcode readonly data={this.state.data} changeLastInput={(e) => { this.setSelectedModalValue(e) }} options={[
-                        {
-                            header: 'Código',
-                            class: 'CODIGO',
-                            pk: true
-                        },
-                        {
-                            header: 'Descripción',
-                            class: 'DESCRIPCION'
-                        }
-                    ]} />
+                <Modal modalType={this.state.modalType} data={this.state.selectedMatchcode} changeLastInput={(e) => { this.setSelectedModalValue(e) }}>
+                    {this.state.modalType === 'modal' && this.renderAditional()}
                 </Modal>
             </Fragment>
         )

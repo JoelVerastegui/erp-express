@@ -127,7 +127,7 @@ function Field(props) {
                             {
                                 matchcode !== '' &&
                                 <div className="input-group-append">
-                                    <input type="button" className={matchcode + " MC btn btn-outline-secondary"} value="MC" onClick={(e) => {props.changeFocus(e.target.parentElement.previousSibling)}} data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />
+                                    <input type="button" className={matchcode + " MC btn btn-outline-secondary"} value="MC" onClick={(e) => {props.changeFocus(e.target.parentElement.previousSibling,e.target.className.split(' ').find(x => x.startsWith('GECL')))}} data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />
                                 </div>
                             }
                         </div>

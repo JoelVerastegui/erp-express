@@ -1,45 +1,41 @@
 [
     {
-        "VSC_DATA": [
+        "GETB_MM_CENT": [
             {
-                "GETB_MM_CENT": [
-                    {
-                        "CODIGO": "c006",
-                        "DESCRIPCION": "4"
-                    },
-                    {
-                        "CODIGO": "c007",
-                        "DESCRIPCION": "Prueba"
-                    },
-                    {
-                        "CODIGO": "CTR ",
-                        "DESCRIPCION": "Centro1"
-                    },
-                    {
-                        "CODIGO": "CTR2",
-                        "DESCRIPCION": "CENT1"
-                    },
-                    {
-                        "CODIGO": "CTR3",
-                        "DESCRIPCION": "Cent1"
-                    },
-                    {
-                        "CODIGO": "GRE2",
-                        "DESCRIPCION": "EBIM MATRIZ 2"
-                    },
-                    {
-                        "CODIGO": "OML1",
-                        "DESCRIPCION": "OML CENTRO 1"
-                    },
-                    {
-                        "CODIGO": "RCC1",
-                        "DESCRIPCION": "Centro San Isidro"
-                    }
-                ],
-                "TABLA": "MC_MM_CENT",
-                "TITULO": "Centros"
+                "CODIGO": "c006",
+                "DESCRIPCION": "4"
+            },
+            {
+                "CODIGO": "c007",
+                "DESCRIPCION": "Prueba"
+            },
+            {
+                "CODIGO": "CTR ",
+                "DESCRIPCION": "Centro1"
+            },
+            {
+                "CODIGO": "CTR2",
+                "DESCRIPCION": "CENT1"
+            },
+            {
+                "CODIGO": "CTR3",
+                "DESCRIPCION": "Cent1"
+            },
+            {
+                "CODIGO": "GRE2",
+                "DESCRIPCION": "EBIM MATRIZ 2"
+            },
+            {
+                "CODIGO": "OML1",
+                "DESCRIPCION": "OML CENTRO 1"
+            },
+            {
+                "CODIGO": "RCC1",
+                "DESCRIPCION": "Centro San Isidro"
             }
-        ]
+        ],
+        "TABLA": "MC_MM_CENT",
+        "TITULO": "Centros"
     },
     {
         "TABLA": "MC_MM_ARTI",

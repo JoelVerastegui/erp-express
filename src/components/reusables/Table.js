@@ -5,7 +5,7 @@ class Table extends React.Component {
         super(props);
 
         this.state = {
-            matchcode: this.props.matchcode !== undefined ? this.props.matchcode : '',
+            title: this.props.title !== undefined ? this.props.title : '',
             name: this.props.name !== undefined ? this.props.name : '',
             actions: this.props.actions !== undefined ? this.props.actions : '',
             readonly: this.props.readonly !== undefined ? this.props.readonly : '',
@@ -154,7 +154,7 @@ class Table extends React.Component {
 
                                                         {
                                                             this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) &&
-                                                            (<input type="button" className={this.state.options[ind]["matchcode"] + " btn btn-outline-secondary"} value="MC" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />)
+                                                            (<input type="button" className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"} value="MC" onClick={(e) => {this.props.changeFocus(e.target.previousSibling,e.target.className.split(' ').find(x => x.startsWith('GECL')),i)}} data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />)
                                                         }
 
                                                     </div>
@@ -223,96 +223,6 @@ class Table extends React.Component {
                 </table>
             </div>
         )
-    }
-
-    matchcodeTable() {
-        return (
-            <Fragment>
-                <input className="form-control" placeholder="Buscar..." onChange={(e) => this.searchCode(e.target)} />
-                <div className="overflow-auto my-2" style={{ maxHeight: "230px" }}>
-                    <table className={"table table-bordered table-hover table-sm"} style={this.state.fit !== '' ? { width: "auto" } : {}}>
-                        <thead className="thead-light">
-                            <tr>
-                                <th className="sticky-top" style={{ width: "38px", top: "-1px" }}></th>
-                                <th className="sticky-top" style={{ top: "-1px" }}>Código</th>
-                                <th className="sticky-top" style={{ top: "-1px" }}>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.data.map((e, i) => {
-                                    return (
-                                        <tr key={i}>
-                                            <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
-                                            {
-                                                Object.keys(e).map((f, ind) => {
-                                                    return (<td key={ind} className={this.state.selected === i ? "bg-secondary text-white" : ""}>{e[f]}</td>)
-                                                })
-                                            }
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div className="d-flex justify-content-between">
-                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
-                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={(e) => { this.cleanMatchcodeTable(e) }} />
-                </div>
-            </Fragment>
-        )
-    }
-
-    sendCode(event) {
-        if (this.state.selected !== undefined) {
-            if (event.target.dataset.dismiss !== undefined) {
-                let code = event.target.parentElement.previousSibling // div
-                    .children[0] // table
-                    .children[1] // tbody
-                    .children[this.state.selected] // selected tr
-                    .children[1] // td
-                    .innerText; // code
-
-                this.props.changeLastInput(code);
-                event.target.removeAttribute('data-dismiss', 'modal');
-                this.cleanMatchcodeTable(event);
-            } else {
-                event.target.setAttribute('data-dismiss', 'modal');
-                event.target.click();
-            }
-        } else {
-            event.preventDefault();
-            event.stopPropagation();
-            alert('Debe seleccionar un registro.');
-        }
-    }
-
-    cleanMatchcodeTable(e) {
-        e.target.parentElement.parentElement.children[0].value = '';
-        this.searchCode(e.target.parentElement.parentElement.children[0]);
-        this.setState({ selected: undefined });
-    }
-
-    searchCode(event) {
-        var input, filter, table, tr, td, td2, i, txtValue, txtValue2;
-        input = event;
-        filter = input.value.toUpperCase();
-        table = input.nextSibling.children[0]; // table
-        tr = table.children[1].getElementsByTagName("tr"); // tbody tr
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
-            td2 = tr[i].getElementsByTagName("td")[2];
-            if (td || td2) {
-                txtValue = td.textContent || td.innerText;
-                txtValue2 = td2.textContent || td2.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
     }
 
     validation(event) {
@@ -472,10 +382,10 @@ class Table extends React.Component {
         return (
             <Fragment>
                 {
-                    this.state.matchcode !== '' ? this.matchcodeTable() : (this.state.readonly !== '' ? this.readonlyTable() : this.editableTable())
+                    this.state.readonly !== '' ? this.readonlyTable() : this.editableTable()
                 }
                 {
-                    this.state.actions !== '' && this.state.readonly === '' && this.state.matchcode === '' &&
+                    this.state.actions !== '' && this.state.readonly === '' &&
                     (
                         <div className="d-flex">
                             <input type="button" className="btn btn-success mx-1" value="Agregar" onClick={(e) => { this.appendRow(e) }} />
