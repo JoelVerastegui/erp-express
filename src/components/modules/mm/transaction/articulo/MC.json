@@ -130,5 +130,23 @@
             }
         ],
         "TITULO": "Articulos"
+    },
+    {
+        "TABLA": "MC_MM_UMED",
+        "GETB_MM_UMED": [
+            {
+                "CODIGO": "%",
+                "DESCRIPCION": "Porcentaje"
+            },
+            {
+                "CODIGO": ".%",
+                "DESCRIPCION": "Porcentaje Decimal"
+            },
+            {
+                "CODIGO": "Und",
+                "DESCRIPCION": "Unidad"
+            }
+        ],
+        "TITULO": "Unidades medidas"
     }
 ]

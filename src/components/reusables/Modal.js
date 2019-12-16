@@ -6,10 +6,11 @@ class Modal extends React.Component {
 
         this.state = {
             loading: true,
+            children: this.props.children,
             title: this.props.title !== undefined ? this.props.title : '',
-            data: this.props.data,
+            data: this.props.data !== undefined ? this.props.data : [],
             selected: undefined,
-            modalType: this.props.modalType,
+            modalType: this.props.modalType !== undefined ? this.props.modalType : '',
             isModalActive: false
         }
     }
@@ -33,13 +34,29 @@ class Modal extends React.Component {
                 loading: false,
                 modalType: this.props.modalType
             })
-        } else if(this.props.modalType !== undefined){
-            let isModalActive = this.props.modalType === 'modal' || this.state.isModalActive ? true : false;
+        }
+
+        if(this.props.modalType !== undefined){
+            let isModalActive;
+            let modalType;
+            if(this.props.modalType !== ''){
+                isModalActive = this.props.modalType === 'modal' || this.state.isModalActive ? true : false;
+            } else{
+                isModalActive = false;
+            }
+            
+            modalType = isModalActive ? 'modal' : this.props.modalType;
 
             this.setState({
-                modalType: this.props.modalType,
+                modalType,
                 loading: false,
                 isModalActive
+            })
+        }
+
+        if(this.props.children !== undefined && this.props.children !== false){
+            this.setState({
+                children: this.props.children
             })
         }
     }
@@ -80,8 +97,8 @@ class Modal extends React.Component {
                     </table>
                 </div>
                 <div className="d-flex justify-content-between">
-                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
-                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={(e) => { this.cleanMatchcodeTable(e) }} />
+                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" data-target={this.state.isModalActive ? "#modal2" : ""} data-toggle={this.state.isModalActive ? "modal" : ""} onClick={(event) => { this.sendCode(event) }} />
+                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" data-target={this.state.isModalActive ? "#modal2" : ""} data-toggle={this.state.isModalActive ? "modal" : ""} onClick={(e) => { this.cleanMatchcodeTable(e) }} />
                 </div>
             </Fragment>
         )
@@ -138,29 +155,11 @@ class Modal extends React.Component {
         }
     }
 
-    content() {
-        return (
+    modalContent(){
+        return(
             <Fragment>
-                {
-                    this.state.modalType === "modal" ? this.props.children : this.matchcodeTable()
-                }
-            </Fragment>
-        )
-    }
-
-    render() {
-        return (
-            <Fragment>
-                <div className="modal fade" id="modal" tabIndex="-1" role="dialog">
-                    <div className={"modal-dialog modal-dialog-centered" + (this.state.modalType === "modal" ? " modal-lg" : "")} role="document">
-
-                        {/* <div className="modal-header">
-                            <h5 className="modal-title">{props.title}</h5>
-                            {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> }
-                        </div> */}
-
+                <div className="modal fade" id="modal2" tabIndex="-1" role="dialog">
+                    <div className={"modal-dialog modal-dialog-centered modal-lg"} role="document">
                         {
                             this.state.loading ? (
                                 <div className={this.state.loading ? "w-100 h-100 d-flex justify-content-center align-items-center" : "w-0 h-0"}>
@@ -170,7 +169,7 @@ class Modal extends React.Component {
                                     <div className="modal-content">
                                         <div className="modal-body">
                                             {
-                                                this.content()
+                                                this.state.children
                                             }
                                         </div>
                                     </div>
@@ -178,6 +177,46 @@ class Modal extends React.Component {
                         }
                     </div>
                 </div>
+            </Fragment>
+        )
+    }
+
+    matchcodeContent() {
+        return (
+            <Fragment>
+                <div className="modal fade" id="modal" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        {
+                            this.state.loading ? (
+                                <div className={this.state.loading ? "w-100 h-100 d-flex justify-content-center align-items-center" : "w-0 h-0"}>
+                                    <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
+                                </div>
+                            ) : (
+                                    <div className="modal-content">
+                                        <div className="modal-body">
+                                            {
+                                                this.matchcodeTable()
+                                            }
+                                        </div>
+                                    </div>
+                                )
+                        }
+                    </div>
+                </div>
+            </Fragment>
+        )
+    }
+
+    
+    render() {
+        return (
+            <Fragment>
+                {
+                    this.modalContent()
+                }
+                {
+                    this.matchcodeContent()
+                }
             </Fragment>
         )
     }

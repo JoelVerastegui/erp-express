@@ -24,6 +24,9 @@ class Articulo extends React.Component {
             isTablet: 700,
             section: 1,
             tab: 1,
+            tabTitle: 'Datos generales',
+            modalTab: 1,
+            modalTabTitle: 'Unidades de medida',
             lastInputFocused: undefined,
             JSON_DATA: JSON_STRUCTURE,
             VALIDATION: [{
@@ -34,7 +37,7 @@ class Articulo extends React.Component {
             },
             {
                 GECL_ELDA_SHLPNAME: "Grp. Artículo",
-                GECL_DOMI_DATATYPE: "deci",
+                GECL_DOMI_DATATYPE: "char",
                 GECL_DOMI_LENG: 20,
                 GECL_CAMP_NAME: "GECL_ARTI_MATKL"
             },
@@ -147,7 +150,7 @@ class Articulo extends React.Component {
                 GECL_CAMP_NAME: "GECL_ARUM_MEINH"
             }],
             MATCHCODE: MC_STRUCTURE,
-            modalType: "modal",
+            modalType: "",
             selectedMatchcode: undefined,
             tableIndex: undefined,
             data: [
@@ -423,7 +426,7 @@ class Articulo extends React.Component {
                 <Article class="d-flex flex-wrap p-3 justify-content-between align-items-center">
                     <h4 className="h4 text-muted font-weight-normal m-0">Articulo</h4>
                     <Article width="auto" class="d-flex justify-content-start">
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
+                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal2" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
                     </Article>
@@ -432,31 +435,31 @@ class Articulo extends React.Component {
                 <Article class="d-flex py-2">
                     <ul className="nav-tabs mb-1 d-flex" style={{ overflowX: "auto", overflowY: "hidden", listStyleType: "none" }}>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Datos Base 1" onClick={() => { this.changeTab(1) }} />
+                            <input type="button" className={this.state.tab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Datos Base 1" onClick={(e) => { this.changeTab(1, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Compras" onClick={() => { this.changeTab(2) }} />
+                            <input type="button" className={this.state.tab === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Compras" onClick={(e) => { this.changeTab(2, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 3 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 1" onClick={() => { this.changeTab(3) }} />
+                            <input type="button" className={this.state.tab === 3 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 1" onClick={(e) => { this.changeTab(3, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 4 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 2" onClick={() => { this.changeTab(4) }} />
+                            <input type="button" className={this.state.tab === 4 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Organización Ventas 2" onClick={(e) => { this.changeTab(4, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 5 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Com.ext.Importación" onClick={() => { this.changeTab(5) }} />
+                            <input type="button" className={this.state.tab === 5 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Com.ext.Importación" onClick={(e) => { this.changeTab(5, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 6 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Ventas:Gnral./Centro" onClick={() => { this.changeTab(6) }} />
+                            <input type="button" className={this.state.tab === 6 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Ventas:Gnral./Centro" onClick={(e) => { this.changeTab(6, e) }} />
                         </li>
                         <li className="nav-item">
-                            <input type="button" className={this.state.tab === 7 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Contabilidad 1" onClick={() => { this.changeTab(7) }} />
+                            <input type="button" className={this.state.tab === 7 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Contabilidad 1" onClick={(e) => { this.changeTab(7, e) }} />
                         </li>
                     </ul>
                 </Article>
 
                 <Article class="bg-primary p-1 d-flex justify-content-start align-self-center">
-                    <h6 className="h6 text-white font-weight-normal m-0">Datos Base 1</h6>
+                    <h6 className="h6 text-white font-weight-normal m-0">{this.state.tabTitle}</h6>
                 </Article>
 
                 <Article class="border border-primary p-4 overflow-auto px-3">
@@ -467,9 +470,10 @@ class Articulo extends React.Component {
     }
 
     /* ===== TAB RENDERS ===== */
-    changeTab(t) {
+    changeTab(t, e) {
         this.setState({
-            tab: t
+            tab: t,
+            tabTitle: e.target.value
         })
     }
     renderTab(t) {
@@ -641,11 +645,83 @@ class Articulo extends React.Component {
             <Fragment>
                 <Article class="d-flex flex-wrap flex-column">
                     <SubTitle title="Datos Adicionales" />
-                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BISMT")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BISMT"]} onChange={this.updateJSON.bind(this)}  matchcode="GECL_CENT_MATKL" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+
+                    <Article class="d-flex py-2">
+                        <ul className="nav-tabs mb-1 d-flex" style={{ overflowX: "auto", overflowY: "hidden", listStyleType: "none" }}>
+                            <li className="nav-item">
+                                <input type="button" className={this.state.modalTab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Unidades de medida" onClick={(e) => { this.setState({ modalTab: 1, modalTabTitle: e.target.value }, () => { this.forceUpdate() }) }} />
+                            </li>
+                            <li className="nav-item">
+                                <input type="button" className={this.state.modalTab === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="EANs adicionales" onClick={(e) => { this.setState({ modalTab: 2, modalTabTitle: e.target.value }, () => { this.forceUpdate() }) }} />
+                            </li>
+                        </ul>
+                    </Article>
+
+                    <Article class="bg-primary p-1 d-flex justify-content-start align-self-center">
+                        <h6 className="h6 text-white font-weight-normal m-0">{this.state.modalTabTitle}</h6>
+                    </Article>
+
+                    <Article class="border border-primary p-4 overflow-auto px-3">
+                        {this.state.modalTab === 1 ? this.modalTab1() : this.modalTab2()}
+                    </Article>
+
                     <Article class="d-flex justify-content-end">
-                        <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" />
+                        <input type="button" className="btn btn-danger mx-2 my-1" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={() => { this.setState({ modalType: '' }) }} />
                     </Article>
                 </Article>
+            </Fragment>
+        )
+    }
+
+    /* ===== MODALTAB RENDERS ===== */
+    modalTab1() {
+        return (
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <Field disabled validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARUM_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARUM"]["GECL_ARUM_MATNR"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                </Article>
+
+                <SubTitle title="Datos de Valoración Generales" />
+                <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }} options={[
+                    {
+                        header: 'UMA',
+                        class: 'GECL_ARUM_MEINH',
+                        pk: true,
+                        matchcode: "GECL_UMED_MSEHI"
+                    }, {
+                        header: 'X',
+                        class: 'GECL_ARUM_UMREN'
+                    }, {
+                        header: 'Y',
+                        class: 'GECL_ARUM_UMREZ'
+                    }, {
+                        header: 'UMB',
+                        class: 'GECL_ARUM_MSEHI',
+                        matchcode: 'GECL_UMED_MSEHI'
+                    }, {
+                        class: 'IND_TRANSC'
+                    }, {
+                        header: 'Texto Unidad Medida',
+                        class: 'GECL_ARUM_MEINH',
+                        description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))).find(f => f.startsWith('GETB'))] || undefined,
+                        position: 1
+                    }, {
+                        header: 'Texto Unidad Medida',
+                        class: 'GECL_ARUM_MEINH',
+                        description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))).find(f => f.startsWith('GETB'))] || undefined,
+                        position: 3
+                    }
+                ]} />
+            </Fragment>
+        )
+    }
+    modalTab2() {
+        return (
+            <Fragment>
+                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_AREM_MATNR")} value={this.state.JSON_DATA["GETB_MM_AREM"]["GECL_AREM_MATNR"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
             </Fragment>
         )
     }
