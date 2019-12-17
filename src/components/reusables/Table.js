@@ -80,7 +80,6 @@ class Table extends React.Component {
         this.sortData(this.state.data);
     }
 
-
     componentWillReceiveProps() {
         this.sortData(this.props.data);
     }
@@ -91,14 +90,18 @@ class Table extends React.Component {
         messyData.forEach(d => {
             let data2 = {};
             this.state.options.forEach(o => {
-                data2 = { ...data2, [o["class"]]: d[o["class"]] }
+                if (!o["description"]) {
+                    data2 = { ...data2, [o["class"]]: d[o["class"]] }
+                }
             })
             data.push(data2);
         })
 
         this.setState({
             data
-        })
+        }, () => { this.forceUpdate() })
+
+
     }
 
     editableTable() {
@@ -174,7 +177,7 @@ class Table extends React.Component {
                                                         </td>
                                                         {
                                                             this.state.options.filter(x => x.description !== undefined).find(y => y.position === ind)
-                                                                ? this.descriptionColumn(i,ind,this.state.options.filter(x => x.description !== undefined).find(y => y.position === ind))
+                                                                ? this.descriptionColumn(i, ind, this.state.options.filter(x => x.description !== undefined).find(y => y.position === ind))
                                                                 : ''
                                                         }
                                                     </Fragment>
@@ -191,12 +194,12 @@ class Table extends React.Component {
         )
     }
 
-    descriptionColumn(i,ind,e) {
+    descriptionColumn(i, ind, e) {
         return (
             <td className="p-0" key={ind + 100}>
                 <div className="d-flex">
                     <input className={"form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
-                        value={e["description"].find(z => z.CODIGO === this.state.data[i][e["class"]]) 
+                        value={e["description"].find(z => z.CODIGO === this.state.data[i][e["class"]])
                             ? e["description"].find(z => z.CODIGO === this.state.data[i][e["class"]])["DESCRIPCION"]
                             : ''}
                         disabled />
@@ -327,7 +330,7 @@ class Table extends React.Component {
             let data = {};
 
             this.state.options.forEach((f) => {
-                if (f["class"].startsWith('GECL')) {
+                if (f["class"].startsWith('GECL') && !f["description"]) {
                     data[f["class"]] = ''
                 }
             })
@@ -339,6 +342,9 @@ class Table extends React.Component {
             tableName = `LST_GETB_MM_${tableName}`;
 
             this.props.onChange(tableName, data);
+
+            document.getElementsByClassName('closeModal')[0].click();
+            document.getElementsByClassName('showModal')[0].click();
         }
     }
 

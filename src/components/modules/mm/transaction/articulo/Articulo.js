@@ -331,7 +331,7 @@ class Articulo extends React.Component {
                             ...this.state.JSON_DATA,
                             [table]: temp
                         }
-                    })
+                    }, () => this.forceUpdate())
                 } else {
                     this.setState({
                         JSON_DATA: {
@@ -341,7 +341,7 @@ class Articulo extends React.Component {
                                 [field]: value
                             }
                         }
-                    })
+                    }, () => this.forceUpdate())
                 }
             } else {
                 let temp = this.state.JSON_DATA[table];
@@ -353,7 +353,7 @@ class Articulo extends React.Component {
                         ...this.state.JSON_DATA,
                         [table]: temp
                     }
-                })
+                }, () => this.forceUpdate())
             }
         } else {
             this.setState({
@@ -426,7 +426,7 @@ class Articulo extends React.Component {
                 <Article class="d-flex flex-wrap p-3 justify-content-between align-items-center">
                     <h4 className="h4 text-muted font-weight-normal m-0">Articulo</h4>
                     <Article width="auto" class="d-flex justify-content-start">
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal2" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
+                        <input type="button" className="showModal btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal2" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
                     </Article>
@@ -556,7 +556,7 @@ class Articulo extends React.Component {
         return (
             <Fragment>
                 <h1 className="h1">Organización Ventas 1</h1>
-                <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }} options={[
+                {/* <Table actions name="LST_GETB_MM_ARUM" validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARUM'))} data={this.state.JSON_DATA["LST_GETB_MM_ARUM"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }} options={[
                     {
                         header: 'Código',
                         class: 'GECL_ARUM_MEINH',
@@ -576,9 +576,7 @@ class Articulo extends React.Component {
                     }, {
                         class: 'IND_TRANSC'
                     }
-                ]} />
-                {/* Crear una propiedad que reciba un arreglo de objetos de configuracion para los headers */}
-                {/* para definir los pk, disabled, etc */}
+                ]} /> */}
             </Fragment>
         )
     }
@@ -666,7 +664,7 @@ class Articulo extends React.Component {
                     </Article>
 
                     <Article class="d-flex justify-content-end">
-                        <input type="button" className="btn btn-danger mx-2 my-1" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={() => { this.setState({ modalType: '' }) }} />
+                        <input type="button" className="closeModal btn btn-secondary mx-2 my-1" value="Cerrar" data-dismiss="modal" aria-label="Close" onClick={() => { this.setState({ modalType: '' }) }} />
                     </Article>
                 </Article>
             </Fragment>
