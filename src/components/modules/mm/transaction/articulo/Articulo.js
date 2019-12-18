@@ -363,6 +363,13 @@ class Articulo extends React.Component {
                 }
             }, () => this.forceUpdate())
         }
+
+        if(this.state.modalType === 'modal'){
+            document.getElementsByClassName('closeModal')[0].click();
+            setTimeout(() => {
+                document.getElementsByClassName('showModal')[0].click();
+            }, 200);
+        }
     }
 
     /* ===== SECTION RENDERS ===== */

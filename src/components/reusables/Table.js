@@ -96,10 +96,11 @@ class Table extends React.Component {
             })
             data.push(data2);
         })
+        
 
         this.setState({
             data
-        }, () => { this.forceUpdate() })
+        }, () => { this.forceUpdate(); })
 
 
     }
@@ -342,9 +343,6 @@ class Table extends React.Component {
             tableName = `LST_GETB_MM_${tableName}`;
 
             this.props.onChange(tableName, data);
-
-            document.getElementsByClassName('closeModal')[0].click();
-            document.getElementsByClassName('showModal')[0].click();
         }
     }
 
