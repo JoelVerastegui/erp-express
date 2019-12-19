@@ -331,7 +331,16 @@ class Articulo extends React.Component {
                             ...this.state.JSON_DATA,
                             [table]: temp
                         }
-                    }, () => { this.forceUpdate(); if(this.state.lastInputFocused) {this.state.lastInputFocused.blur(); this.state.lastInputFocused.focus(); this.setState({lastInputFocused: undefined})} })
+                    }, () => { 
+                        this.forceUpdate(); 
+                        if(this.state.lastInputFocused) {
+                            this.state.lastInputFocused.blur(); 
+                            this.state.lastInputFocused.focus(); 
+                            this.setState({lastInputFocused: undefined})
+                        } else{
+                            let f = document.activeElement;
+                            f.blur(); f.focus();
+                        } })
                 } else {
                     this.setState({
                         JSON_DATA: {
@@ -624,7 +633,7 @@ class Articulo extends React.Component {
                 let title = data["TITULO"];
                 let GETB = Object.keys(data).find(x => x.startsWith('GETB'));
                 data = data[GETB];
-
+                
                 this.setState({
                     lastInputFocused: lastInput,
                     selectedMatchcode: {
@@ -740,6 +749,9 @@ class Articulo extends React.Component {
     }
 
     render() {
+        let msg = this.state.JSON_DATA["LST_GETB_MM_ARUM"][0]["GECL_ARUM_UMREN"];
+        // alert(msg);
+
         return (
             <Fragment>
                 {this.state.loading

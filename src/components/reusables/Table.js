@@ -164,7 +164,7 @@ class Table extends React.Component {
                                             Object.keys(e).map((f, ind) => {
                                                 return (
                                                     <Fragment>
-                                                        <td className={(this.state.options[ind]["header"] === undefined ? "d-none " : "") + "p-0" + (this.state.options[ind]["type"] !== undefined ? (this.state.selected === i && this.state.options[ind]["type"] === 'checkbox' ? " bg-secondary text-white" : "") : "")} style={this.state.options[ind]["type"] === 'checkbox' ? { display: "flex", justifyContent: "center", alignItems: "center" } : {}} key={ind}>
+                                                        <td key={ind} className={(this.state.options[ind]["header"] === undefined ? "d-none " : "") + "p-0" + (this.state.options[ind]["type"] !== undefined ? (this.state.selected === i && this.state.options[ind]["type"] === 'checkbox' ? " bg-secondary text-white" : "") : "")} style={this.state.options[ind]["type"] === 'checkbox' ? { display: "flex", justifyContent: "center", alignItems: "center" } : {}} key={ind}>
                                                             <div className="d-flex">
                                                                 <input className={f + " form-control " + (this.state.selected === i ? "bg-secondary text-white" : "")}
                                                                     type={this.state.options[ind]["type"] !== undefined ? this.state.options[ind]["type"] : 'text'}
@@ -201,13 +201,14 @@ class Table extends React.Component {
                                                                             onClick={(e) => { 
                                                                                 this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i); 
                                                                                 this.setState({lastFocusInput: e.target.previousSibling});
-                                                                                document.getElementById('modal').style.display = "block";
-                                                                                document.getElementById('modal').classList.add('show');
+                                                                                // document.getElementById('modal').style.display = "block";
+                                                                                // document.getElementById('modal').classList.add('show');
                                                                             }}
                                                                             data-backdrop="static" 
                                                                             data-keyboard="false" 
-                                                                            // data-toggle="modal" 
-                                                                            // data-target="#modal" 
+                                                                            data-toggle="modal" 
+                                                                            data-target="#modal" 
+                                                                            data-dismiss="modal"
                                                                              />)
                                                                 }
 
