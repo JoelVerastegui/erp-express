@@ -324,14 +324,14 @@ class Articulo extends React.Component {
                 if (index !== undefined) {
                     let temp = this.state.JSON_DATA[table];
 
-                    temp[index] = { ...temp[index], [field]: value }
+                    temp[index] = { ...temp[index], [field]: value };
 
                     this.setState({
                         JSON_DATA: {
                             ...this.state.JSON_DATA,
                             [table]: temp
                         }
-                    }, () => this.forceUpdate())
+                    }, () => { this.forceUpdate(); if(this.state.lastInputFocused) {this.state.lastInputFocused.blur(); this.state.lastInputFocused.focus(); this.setState({lastInputFocused: undefined})} })
                 } else {
                     this.setState({
                         JSON_DATA: {
@@ -362,13 +362,6 @@ class Articulo extends React.Component {
                     [table]: [...this.state.JSON_DATA[table], field]
                 }
             }, () => this.forceUpdate())
-        }
-
-        if(this.state.modalType === 'modal'){
-            document.getElementsByClassName('closeModal')[0].click();
-            setTimeout(() => {
-                document.getElementsByClassName('showModal')[0].click();
-            }, 200);
         }
     }
 
@@ -713,7 +706,7 @@ class Articulo extends React.Component {
                         position: 1
                     }, {
                         header: 'Texto Unidad Medida',
-                        class: 'GECL_ARUM_MEINH',
+                        class: 'GECL_ARUM_MSEHI',
                         description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_UMED'))).find(f => f.startsWith('GETB'))] || undefined,
                         position: 3
                     }

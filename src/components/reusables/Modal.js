@@ -97,8 +97,8 @@ class Modal extends React.Component {
                     </table>
                 </div>
                 <div className="d-flex justify-content-between">
-                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" data-target={this.state.isModalActive ? "#modal2" : ""} data-toggle={this.state.isModalActive ? "modal" : ""} onClick={(event) => { this.sendCode(event) }} />
-                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" data-target={this.state.isModalActive ? "#modal2" : ""} data-toggle={this.state.isModalActive ? "modal" : ""} onClick={(e) => { this.cleanMatchcodeTable(e) }} />
+                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
+                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" data-dismiss="modal" aria-label="Close" onClick={(e) => { this.cleanMatchcodeTable(e) }} />
                 </div>
             </Fragment>
         )
@@ -106,7 +106,7 @@ class Modal extends React.Component {
 
     sendCode(event) {
         if (this.state.selected !== undefined) {
-            if (event.target.dataset.dismiss !== undefined) {
+            // if (event.target.dataset.dismiss !== undefined) {
                 let code = event.target.parentElement.previousSibling // div
                     .children[0] // table
                     .children[1] // tbody
@@ -114,13 +114,19 @@ class Modal extends React.Component {
                     .children[1] // td
                     .innerText; // code
 
-                this.props.changeLastInput(code);
-                event.target.removeAttribute('data-dismiss', 'modal');
+                // event.target.removeAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
+                // event.target.removeAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
+                // event.target.removeAttribute('data-dismiss', 'modal');
+                document.getElementById('modal').classList.remove('show');
+                document.getElementById('modal').style.display = 'none';
                 this.cleanMatchcodeTable(event);
-            } else {
-                event.target.setAttribute('data-dismiss', 'modal');
-                event.target.click();
-            }
+                this.props.changeLastInput(code);
+            // } else {
+            //     // event.target.setAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
+            //     event.target.setAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
+            //     event.target.setAttribute('data-dismiss', 'modal');
+            //     event.target.click();
+            // }
         } else {
             event.preventDefault();
             event.stopPropagation();

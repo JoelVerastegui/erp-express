@@ -15,6 +15,7 @@ class Table extends React.Component {
             selected: undefined,
             data: this.props.data,
             mcActive: undefined,
+            lastFocusInput: undefined,
             originData: []
         }
     }
@@ -80,6 +81,10 @@ class Table extends React.Component {
         this.sortData(this.state.data);
     }
 
+    componentDidUpdate(){
+        this.sortData(this.props.data);
+    }
+
     componentWillReceiveProps() {
         this.sortData(this.props.data);
     }
@@ -97,13 +102,32 @@ class Table extends React.Component {
             data.push(data2);
         })
         
-
-        this.setState({
-            data
-        }, () => { this.forceUpdate(); })
-
-
+        if(JSON.stringify(data) !== JSON.stringify(this.state.data)){
+            this.setState({
+                data
+            }, () => {this.forceUpdate()})
+        }
     }
+
+    objectsAreSame(a, b) {
+        var objectsAreSame = true;
+        if(a.length === b.length){
+            a.forEach((x,i) => {
+                if(objectsAreSame){
+                    Object.keys(x).forEach(y => {
+                        if(a[i][y] !== b[i][y]){
+                            objectsAreSame = false;
+                            return objectsAreSame;
+                        }
+                    })
+                }
+            })
+        } else{
+            objectsAreSame = false;
+        }
+        
+        return objectsAreSame;
+     }
 
     editableTable() {
         return (
@@ -171,7 +195,20 @@ class Table extends React.Component {
 
                                                                 {
                                                                     this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) &&
-                                                                    (<input type="button" className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"} value="MC" onClick={(e) => { this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i) }} data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal" />)
+                                                                    (<input type="button" 
+                                                                            className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"} 
+                                                                            value="MC" 
+                                                                            onClick={(e) => { 
+                                                                                this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i); 
+                                                                                this.setState({lastFocusInput: e.target.previousSibling});
+                                                                                document.getElementById('modal').style.display = "block";
+                                                                                document.getElementById('modal').classList.add('show');
+                                                                            }}
+                                                                            data-backdrop="static" 
+                                                                            data-keyboard="false" 
+                                                                            // data-toggle="modal" 
+                                                                            // data-target="#modal" 
+                                                                             />)
                                                                 }
 
                                                             </div>
