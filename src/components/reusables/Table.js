@@ -13,7 +13,7 @@ class Table extends React.Component {
             fit: this.props.fit !== undefined ? this.props.fit : '',
             options: this.props.options,
             selected: undefined,
-            data: this.props.data,
+            data: undefined,
             mcActive: undefined,
             lastFocusInput: undefined,
             originData: []
@@ -37,13 +37,23 @@ class Table extends React.Component {
         let row = event.target.parentElement.parentElement.parentElement;
         let fieldIndex = nodes.indexOf(row);
 
-        if (this.props.onChange != undefined) {
-            this.props.onChange(tableName, fieldName, fieldValue, fieldIndex);
+        if(document.getElementById('modal2').style.display === 'none'){
+            if (this.props.onChange != undefined) {
+                this.props.onChange(tableName, fieldName, fieldValue, fieldIndex);
+            }
+        } else{
+            let data = this.state.data;
+            data[fieldIndex] = {...data[fieldIndex],[fieldName]: fieldValue}
+            this.setState({data},()=>{this.forceUpdate()})
         }
     }
 
     componentWillMount() {
-        let data = this.state.data;
+        this.setState({
+            data: this.props.data
+        })
+        
+        let data = this.props.data;
 
         let keys = this.state.options.map((f) => {
             if (f["pk"] !== undefined && f["pk"] === true) {
@@ -56,7 +66,7 @@ class Table extends React.Component {
         if (keys.length) {
             let equals = 0;
 
-            this.state.data.map((e, i) => {
+            this.props.data.map((e, i) => {
                 keys.forEach(x => {
                     if ((e[x] + "").trim() == '' && !i) {
                         equals++;
@@ -81,13 +91,13 @@ class Table extends React.Component {
         this.sortData(this.state.data);
     }
 
-    componentDidUpdate(){
-        this.sortData(this.props.data);
-    }
+    // componentDidUpdate(){
+    //     this.sortData(this.props.data);
+    // }
 
-    componentWillReceiveProps() {
-        this.sortData(this.props.data);
-    }
+    // componentWillReceiveProps() {
+    //     this.sortData(this.props.data);
+    // }
 
     sortData(messyData) {
         let data = [];
@@ -201,14 +211,14 @@ class Table extends React.Component {
                                                                             onClick={(e) => { 
                                                                                 this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i); 
                                                                                 this.setState({lastFocusInput: e.target.previousSibling});
-                                                                                // document.getElementById('modal').style.display = "block";
+                                                                                document.getElementById('modal2').style.display = "none";
                                                                                 // document.getElementById('modal').classList.add('show');
                                                                             }}
                                                                             data-backdrop="static" 
                                                                             data-keyboard="false" 
                                                                             data-toggle="modal" 
                                                                             data-target="#modal" 
-                                                                            data-dismiss="modal"
+                                                                            // data-dismiss="modal"
                                                                              />)
                                                                 }
 

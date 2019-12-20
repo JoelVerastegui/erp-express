@@ -98,7 +98,7 @@ class Modal extends React.Component {
                 </div>
                 <div className="d-flex justify-content-between">
                     <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
-                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" aria-label="Close" onClick={(e) => { this.cleanMatchcodeTable(e); document.getElementById('modal').style.display = 'none' }} />
+                    <input type="button" className="btn btn-danger mx-2" value="Cancelar" aria-label="Close" data-dismiss="modal" onClick={(e) => { this.cleanMatchcodeTable(e); if(this.state.isModalActive) document.getElementById('modal2').style.display = 'block' }} />
                 </div>
             </Fragment>
         )
@@ -114,16 +114,20 @@ class Modal extends React.Component {
                     .children[1] // td
                     .innerText; // code
 
-                event.target.removeAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
-                event.target.removeAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
+                // event.target.removeAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
+                // event.target.removeAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
                 event.target.removeAttribute('data-dismiss', 'modal');
+
+                if(this.state.isModalActive){
+                    document.getElementById('modal2').style.display = 'block';
+                }
                 // document.getElementById('modal').classList.remove('show');
                 // document.getElementById('modal').style.display = 'none';
                 this.cleanMatchcodeTable(event);
                 this.props.changeLastInput(code);
             } else {
-                event.target.setAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
-                event.target.setAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
+                // event.target.setAttribute('data-target', this.state.isModalActive ? '#modal2' : '');
+                // event.target.setAttribute('data-toggle', this.state.isModalActive ? 'modal' : '');
                 event.target.setAttribute('data-dismiss', 'modal');
                 event.target.click();
             }

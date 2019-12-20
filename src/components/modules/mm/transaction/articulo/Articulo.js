@@ -618,8 +618,9 @@ class Articulo extends React.Component {
         let value = e;
 
         if (this.state.tableIndex !== undefined) {
-            this.updateJSON(table, field, value, this.state.tableIndex);
-            this.setState({ tableIndex: undefined });
+            // this.updateJSON(table, field, value, this.state.tableIndex);
+            // this.setState({ tableIndex: undefined });
+            this.state.lastInputFocused.value = value;
         } else {
             this.updateJSON(table, field, value);
         }
@@ -673,7 +674,7 @@ class Articulo extends React.Component {
                     </Article>
 
                     <Article class="d-flex justify-content-end">
-                        <input type="button" className="closeModal btn btn-secondary mx-2 my-1" value="Cerrar" data-dismiss="modal" aria-label="Close" onClick={() => { this.setState({ modalType: '' }) }} />
+                        <input type="button" className="closeModal btn btn-secondary mx-2 my-1" value="Cerrar" data-dismiss="modal" aria-label="Close" onClick={() => { this.setState({ modalType: '' }); document.getElementById('modal2').style.display = "none"; }} />
                     </Article>
                 </Article>
             </Fragment>
