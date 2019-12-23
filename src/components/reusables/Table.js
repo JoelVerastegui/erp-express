@@ -18,6 +18,40 @@ class Table extends React.Component {
             lastFocusInput: undefined,
             originData: []
         }
+
+
+        // listener events
+        window.addEventListener('mcChangeEvent', () => {
+            let data = this.state.data;
+            let trArr = [...document.getElementById('modal2').querySelector('table').querySelectorAll('tbody tr')];
+
+            trArr.forEach((e, i) => {
+                const eleArr = [...e.querySelectorAll('[class*=GECL]')];
+                eleArr.forEach((f) => {
+                    if (!f.className.includes('MC')) {
+                        let className = f.className.split(' ').find(x => x.startsWith('GECL'));
+                        let value = f.value;
+                        data[i] = { ...data[i], [className]: value }
+                    }
+                })
+            })
+
+            if (JSON.stringify(data) !== JSON.stringify(this.state.data)) {
+                this.setState({ data }, () => { this.forceUpdate() });
+            }
+        })
+
+        window.addEventListener('closeModal', () => {
+            if (this.validation()) {
+                if (document.getElementsByClassName('closeModal')[0].dataset.dismiss === undefined) {
+                    this.props.saveData(this.state.name, this.state.data);
+                    document.getElementsByClassName('closeModal')[0].setAttribute('data-dismiss', 'modal');
+                    document.getElementsByClassName('closeModal')[0].click();
+                } else {
+                    document.getElementsByClassName('closeModal')[0].removeAttribute('data-dismiss', 'modal');
+                }
+            }
+        })
     }
 
     onFieldChange(event) {
@@ -37,14 +71,14 @@ class Table extends React.Component {
         let row = event.target.parentElement.parentElement.parentElement;
         let fieldIndex = nodes.indexOf(row);
 
-        if(document.getElementById('modal2').style.display === 'none'){
-            if (this.props.onChange != undefined) {
+        if (document.getElementById('modal2').style.display === 'none') {
+            if (this.props.onChange !== undefined) {
                 this.props.onChange(tableName, fieldName, fieldValue, fieldIndex);
             }
-        } else{
+        } else {
             let data = this.state.data;
-            data[fieldIndex] = {...data[fieldIndex],[fieldName]: fieldValue}
-            this.setState({data},()=>{this.forceUpdate()})
+            data[fieldIndex] = { ...data[fieldIndex], [fieldName]: fieldValue }
+            this.setState({ data }, () => { this.forceUpdate() })
         }
     }
 
@@ -52,7 +86,7 @@ class Table extends React.Component {
         this.setState({
             data: this.props.data
         })
-        
+
         let data = this.props.data;
 
         let keys = this.state.options.map((f) => {
@@ -91,13 +125,11 @@ class Table extends React.Component {
         this.sortData(this.state.data);
     }
 
-    // componentDidUpdate(){
-    //     this.sortData(this.props.data);
-    // }
+    componentDidUpdate() {
+    }
 
-    // componentWillReceiveProps() {
-    //     this.sortData(this.props.data);
-    // }
+    componentWillReceiveProps() {
+    }
 
     sortData(messyData) {
         let data = [];
@@ -111,33 +143,33 @@ class Table extends React.Component {
             })
             data.push(data2);
         })
-        
-        if(JSON.stringify(data) !== JSON.stringify(this.state.data)){
+
+        if (JSON.stringify(data) !== JSON.stringify(this.state.data)) {
             this.setState({
                 data
-            }, () => {this.forceUpdate()})
+            }, () => { this.forceUpdate() })
         }
     }
 
     objectsAreSame(a, b) {
         var objectsAreSame = true;
-        if(a.length === b.length){
-            a.forEach((x,i) => {
-                if(objectsAreSame){
+        if (a.length === b.length) {
+            a.forEach((x, i) => {
+                if (objectsAreSame) {
                     Object.keys(x).forEach(y => {
-                        if(a[i][y] !== b[i][y]){
+                        if (a[i][y] !== b[i][y]) {
                             objectsAreSame = false;
                             return objectsAreSame;
                         }
                     })
                 }
             })
-        } else{
+        } else {
             objectsAreSame = false;
         }
-        
+
         return objectsAreSame;
-     }
+    }
 
     editableTable() {
         return (
@@ -205,21 +237,21 @@ class Table extends React.Component {
 
                                                                 {
                                                                     this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) &&
-                                                                    (<input type="button" 
-                                                                            className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"} 
-                                                                            value="MC" 
-                                                                            onClick={(e) => { 
-                                                                                this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i); 
-                                                                                this.setState({lastFocusInput: e.target.previousSibling});
-                                                                                document.getElementById('modal2').style.display = "none";
-                                                                                // document.getElementById('modal').classList.add('show');
-                                                                            }}
-                                                                            data-backdrop="static" 
-                                                                            data-keyboard="false" 
-                                                                            data-toggle="modal" 
-                                                                            data-target="#modal" 
-                                                                            // data-dismiss="modal"
-                                                                             />)
+                                                                    (<input type="button"
+                                                                        className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"}
+                                                                        value="MC"
+                                                                        onClick={(e) => {
+                                                                            this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i);
+                                                                            this.setState({ lastFocusInput: e.target.previousSibling });
+                                                                            document.getElementById('modal2').style.display = "none";
+                                                                            // document.getElementById('modal').classList.add('show');
+                                                                        }}
+                                                                        data-backdrop="static"
+                                                                        data-keyboard="false"
+                                                                        data-toggle="modal"
+                                                                        data-target="#modal"
+                                                                    // data-dismiss="modal"
+                                                                    />)
                                                                 }
 
                                                             </div>
@@ -311,7 +343,7 @@ class Table extends React.Component {
         )
     }
 
-    validation(event) {
+    validation() {
         let keys = this.state.options.map((f) => {
             if (f["pk"] !== undefined && f["pk"] === true) {
                 return f["class"];
@@ -386,11 +418,15 @@ class Table extends React.Component {
 
             data["IND_TRANSC"] = 'I';
 
-            let tableName = Object.keys(data).find(x => x.startsWith('GECL')).substr(5, 4);
+            if (document.getElementById('modal2').style.display === 'none') {
+                let tableName = Object.keys(data).find(x => x.startsWith('GECL')).substr(5, 4);
 
-            tableName = `LST_GETB_MM_${tableName}`;
+                tableName = `LST_GETB_MM_${tableName}`;
 
-            this.props.onChange(tableName, data);
+                this.props.onChange(tableName, data);
+            } else {
+                this.setState({ data: [...this.state.data, data] });
+            }
         }
     }
 
@@ -425,7 +461,7 @@ class Table extends React.Component {
                     if (e["IND_TRANSC"] !== 'I') {
                         let currentRowKeys = keys.map(x => { return (e[x] + "").trim() });
 
-                        if (JSON.stringify(selectedRowKeys) == JSON.stringify(currentRowKeys)) {
+                        if (JSON.stringify(selectedRowKeys) === JSON.stringify(currentRowKeys)) {
                             equals++;
                         }
                     }
@@ -438,20 +474,40 @@ class Table extends React.Component {
 
                     selectedRowElement.style.display = "none";
 
-                    this.props.onChange(this.state.name, "IND_TRANSC", "D", this.state.selected);
+                    if (document.getElementById('modal2').style.display === 'none') {
+                        this.props.onChange(this.state.name, "IND_TRANSC", "D", this.state.selected);
+                    } else {
+                        let data = this.state.data;
+                        data[this.state.selected] = { ...data[this.state.selected], IND_TRANSC: "D" };
+                        this.setState({data});
+                    }
 
                     this.setState({
                         selected: undefined
                     })
                 } else {
-                    this.props.onChange(this.state.name, "_REMOVE", "NONE", this.state.selected);
+                    if (document.getElementById('modal2').style.display === 'none') {
+                        this.props.onChange(this.state.name, "_REMOVE", "NONE", this.state.selected);
+                    } else {
+                        let data = this.state.data;
+                        delete data[this.state.selected];
+                        data = data.filter(x => x !== undefined);
+                        this.setState({data});
+                    }
 
                     this.setState({
                         selected: undefined
                     })
                 }
             } else {
-                this.props.onChange(this.state.name, "_REMOVE", "NONE", this.state.selected);
+                if (document.getElementById('modal2').style.display === 'none') {
+                    this.props.onChange(this.state.name, "_REMOVE", "NONE", this.state.selected);
+                } else {
+                    let data = this.state.data;
+                    delete data[this.state.selected];
+                    data = data.filter(x => x !== undefined);
+                    this.setState({data});
+                }
 
                 this.setState({
                     selected: undefined

@@ -97,7 +97,7 @@ class Modal extends React.Component {
                     </table>
                 </div>
                 <div className="d-flex justify-content-between">
-                    <input type="button" className="btn btn-success mx-2" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
+                    <input type="button" className="btn btn-success mx-2 mcSelect" value="Confirmar" aria-label="Confirm" onClick={(event) => { this.sendCode(event) }} />
                     <input type="button" className="btn btn-danger mx-2" value="Cancelar" aria-label="Close" data-dismiss="modal" onClick={(e) => { this.cleanMatchcodeTable(e); if(this.state.isModalActive) document.getElementById('modal2').style.display = 'block' }} />
                 </div>
             </Fragment>
