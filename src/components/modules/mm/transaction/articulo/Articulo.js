@@ -621,6 +621,10 @@ class Articulo extends React.Component {
             // this.updateJSON(table, field, value, this.state.tableIndex);
             // this.setState({ tableIndex: undefined });
             this.state.lastInputFocused.value = value;
+            var event = new Event('onChange');
+
+            // Dispatch it.
+            this.state.lastInputFocused.dispatchEvent(event);
         } else {
             this.updateJSON(table, field, value);
         }
