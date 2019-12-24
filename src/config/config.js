@@ -1,6 +1,6 @@
 // ========== SERVER CONFIGURATION ========== //
 const SERVER = {
-    IP: "25.55.155.178",
+    IP: "192.168.1.103",
     PORT: "8081"
 }
 

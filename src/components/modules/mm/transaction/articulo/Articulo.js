@@ -220,50 +220,50 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
-        // let tables = Object.keys(this.state.JSON_DATA);
-        // tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
-        // tables = tables.filter(x => x !== undefined);
-        // tables = [...new Set(tables)];
+        let tables = Object.keys(this.state.JSON_DATA);
+        tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
+        tables = tables.filter(x => x !== undefined);
+        tables = [...new Set(tables)];
 
-        // let lstgetb = "";
+        let lstgetb = "";
 
-        // tables.forEach((e, i) => {
-        //     lstgetb += e;
-        //     if (i !== tables.length - 1) {
-        //         lstgetb += ',';
-        //     }
-        // })
-
-
-        // /* ===== VALIDATION ===== */
-        // let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
-        //     .catch((err) => {
-        //         console.log(err);
-        //         return;
-        //     });
-
-        // if (res) {
-        //     let data = res.data;
-
-        //     if (data.V_TYPE_MESSAGE !== 'E') {
-        //         console.log(data);
-        //         this.setState({
-        //             VALIDATION: data
-        //         })
-        //     } else {
-        //         alert('Error: ', data.MESSAGE);
-        //         return;
-        //     }
-
-        // } else {
-        //     alert('Error de conexión con el servidor.');
-        //     return;
-        // }
+        tables.forEach((e, i) => {
+            lstgetb += e;
+            if (i !== tables.length - 1) {
+                lstgetb += ',';
+            }
+        })
 
 
+        /* ===== VALIDATION ===== */
+        let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
+            .catch((err) => {
+                console.log(err);
+                return;
+            });
 
-        // /* ===== MATCHCODES ===== */
-        // this.getMatchcodes();
+        if (res) {
+            let data = res.data;
+
+            if (data.V_TYPE_MESSAGE !== 'E') {
+                console.log(data);
+                this.setState({
+                    VALIDATION: data
+                })
+            } else {
+                alert('Error: ', data.MESSAGE);
+                return;
+            }
+
+        } else {
+            alert('Error de conexión con el servidor.');
+            return;
+        }
+
+
+
+        /* ===== MATCHCODES ===== */
+        this.getMatchcodes();
     }
 
     async getMatchcodes() {
@@ -619,6 +619,55 @@ class Articulo extends React.Component {
                             <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_VMSTD")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_VMSTD"]} onChange={this.updateJSON.bind(this)} />
                         </Article>
                     </Article>
+
+                    <SubTitle title="Datos de Impuestos" />
+                    <Table
+                    name="LST_GETB_MM_ARCF"
+                    validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARCF'))}
+                    data={this.state.JSON_DATA["LST_GETB_MM_ARCF"]}
+                    onChange={this.updateJSON.bind(this)}
+                    changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }}
+                    saveData={(table, data) => {
+                        this.setState({
+                            JSON_DATA: {
+                                ...this.state.JSON_DATA,
+                                [table]: data
+                            },
+                            modalType: ''
+                        })
+                    }}
+                    options={[
+                        {
+                            header: 'País',
+                            class: 'GECL_ARCF_ALAND',
+                            pk: true,
+                            matchcode: "GECL_PAIS_LAND1"
+                        }, {
+                            header: 'Tipo Impuesto',
+                            class: 'GECL_ARCF_TAXM1'
+                        }, {
+                            header: 'C',
+                            class: 'GECL_ARCF_TAXIM',
+                            matchcode: 'GECL_CLFI_TAXKM'
+                        }, {
+                            class: 'IND_TRANSC'
+                        }, {
+                            header: 'País',
+                            class: 'GECL_ARCF_ALAND',
+                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))).find(f => f.startsWith('GETB'))] : undefined,
+                            position: 0
+                        }, {
+                            header: 'Tipo Impuesto',
+                            class: 'GECL_ARCF_TAXM1',
+                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF'))).find(f => f.startsWith('GETB'))] : undefined,
+                            position: 1
+                        }, {
+                            header: 'Clasificación Fiscal',
+                            class: 'GECL_ARCF_TAXIM',
+                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))).find(f => f.startsWith('GETB'))] : undefined,
+                            position: 2
+                        }
+                    ]} />
                 </Article>
             </Fragment>
         )
