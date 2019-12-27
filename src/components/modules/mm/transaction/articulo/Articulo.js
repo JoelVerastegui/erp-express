@@ -149,10 +149,11 @@ class Articulo extends React.Component {
                 GECL_DOMI_LENG: 4,
                 GECL_CAMP_NAME: "GECL_ARUM_MEINH"
             }],
-            MATCHCODE: MC_STRUCTURE,
+            MATCHCODE: [],//MC_STRUCTURE,
             modalType: "",
             selectedMatchcode: undefined,
             tableIndex: undefined,
+            isModalActive: false,
             data: [
                 {
                     "CODIGO": "c006",
@@ -185,37 +186,13 @@ class Articulo extends React.Component {
                 {
                     "CODIGO": "RCC1",
                     "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
-                },
-                {
-                    "CODIGO": "RCC1",
-                    "DESCRIPCION": "Centro San Isidro"
                 }
             ]
         }
 
 
-        window.addEventListener('click', (e) => {
-            // alert(e);
+        window.addEventListener('loadingScreen', (loading) => {
+            // document.getElementsByClassName('loading')[0].style
         }, false)
     }
 
@@ -299,7 +276,7 @@ class Articulo extends React.Component {
                     let data2 = res.data;
 
                     if (data2.V_TYPE_MESSAGE !== 'E') {
-                        MATCHCODE.push(data2["VSC_DATA"]);
+                        MATCHCODE = [...MATCHCODE, ...data2["VSC_DATA"]];
                     } else {
                         alert('Error: ', data2.MESSAGE);
                         return;
@@ -312,9 +289,10 @@ class Articulo extends React.Component {
             }
 
             this.setState({
-                MATCHCODE: [...this.state.MATCHCODE, MATCHCODE],
+                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE],
                 loading: false
             });
+            
         }
     }
 
@@ -379,7 +357,7 @@ class Articulo extends React.Component {
     changeSection(n) {
         this.setState({
             section: n
-        })
+        },()=>{this.getMatchcodes()})
     }
     section1 = () => {
         return (
@@ -436,7 +414,7 @@ class Articulo extends React.Component {
                 <Article class="d-flex flex-wrap p-3 justify-content-between align-items-center">
                     <h4 className="h4 text-muted font-weight-normal m-0">Articulo</h4>
                     <Article width="auto" class="d-flex justify-content-start">
-                        <input type="button" className="showModal btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal2" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal" }, () => { this.forceUpdate() }); this.renderAditional(); }} />
+                        <input type="button" className="showModal btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modal2" value="Datos Adicionales" onClick={() => { this.setState({ modalType: "modal", isModalActive: true }, () => { this.forceUpdate() }); this.renderAditional(); }} />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Guardar" />
                         <input type="button" className="btn btn-secondary btn-sm mx-2" value="Retornar" />
                     </Article>
@@ -484,7 +462,7 @@ class Articulo extends React.Component {
         this.setState({
             tab: t,
             tabTitle: e.target.value
-        })
+        },()=>{this.getMatchcodes()})
     }
     renderTab(t) {
         switch (t) {
@@ -701,12 +679,18 @@ class Articulo extends React.Component {
         let value = e;
 
         if (this.state.tableIndex !== undefined) {
-            // this.updateJSON(table, field, value, this.state.tableIndex);
-            // this.setState({ tableIndex: undefined });
-            this.state.lastInputFocused.value = value;
-            window.dispatchEvent(new Event('mcChangeEvent'));
+            if(this.state.isModalActive){
+                this.state.lastInputFocused.value = value;
+            } else{
+                this.updateJSON(table, field, value, this.state.tableIndex);
+                this.setState({ tableIndex: undefined });
+            }
         } else {
             this.updateJSON(table, field, value);
+        }
+
+        if(this.state.isModalActive){
+            window.dispatchEvent(new Event('mcChangeEvent'));
         }
     }
 
@@ -787,7 +771,8 @@ class Articulo extends React.Component {
                                 ...this.state.JSON_DATA,
                                 [table]: data
                             },
-                            modalType: ''
+                            modalType: '',
+                            isModalActive: false
                         })
                     }}
                     options={[
@@ -854,11 +839,11 @@ class Articulo extends React.Component {
 
         return (
             <Fragment>
-                {this.state.loading
-                    ? (<div className="w-100 h-100 d-flex justify-content-center align-items-center">
-                        <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
-                    </div>)
-                    : (this.content())
+                <div style={{height:"100%",display:"none"}} className="loading w-100 d-flex justify-content-center align-items-center position-fixed bg-white">
+                    <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
+                </div>
+                {
+                    !this.state.loading && this.content()
                 }
             </Fragment>
         )

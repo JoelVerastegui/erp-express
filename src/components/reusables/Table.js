@@ -236,10 +236,11 @@ class Table extends React.Component {
                                                                     onFocus={(e) => { !e.target.disabled && this.state.options[ind]["matchcode"] !== undefined ? this.setState({ mcActive: { row: i, col: ind } }) : this.setState({ mcActive: undefined }) }} />
 
                                                                 {
-                                                                    this.state.options[ind]["matchcode"] !== undefined && (this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) &&
+                                                                    this.state.options[ind]["matchcode"] !== undefined && 
                                                                     (<input type="button"
                                                                         className={this.state.options[ind]["matchcode"] + " MC btn btn-outline-secondary"}
                                                                         value="MC"
+                                                                        style={(this.state.mcActive !== undefined ? (this.state.mcActive["row"] === i && this.state.mcActive["col"] === ind ? true : false) : false) ? {} : {display:"none"}}
                                                                         onClick={(e) => {
                                                                             this.props.changeFocus(e.target.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL')), i);
                                                                             this.setState({ lastFocusInput: e.target.previousSibling });
