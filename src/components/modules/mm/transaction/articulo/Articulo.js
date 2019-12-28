@@ -19,7 +19,7 @@ class Articulo extends React.Component {
         super(props);
 
         this.state = {
-            loading: false,
+            loading: true,
             isMobile: 650,
             isTablet: 700,
             section: 1,
@@ -191,9 +191,14 @@ class Articulo extends React.Component {
         }
 
 
-        window.addEventListener('loadingScreen', (loading) => {
-            // document.getElementsByClassName('loading')[0].style
-        }, false)
+        window.addEventListener('loadingScreen', (e) => {
+            this.setState({ loading: e.loading })
+            if (e.loading) {
+                document.getElementById('content').classList.add('d-none');
+            } else {
+                document.getElementById('content').classList.remove('d-none');
+            }
+        }, false);
     }
 
     async componentDidMount() {
@@ -223,7 +228,6 @@ class Articulo extends React.Component {
             let data = res.data;
 
             if (data.V_TYPE_MESSAGE !== 'E') {
-                console.log(data);
                 this.setState({
                     VALIDATION: data
                 })
@@ -240,11 +244,56 @@ class Articulo extends React.Component {
 
 
         /* ===== MATCHCODES ===== */
-        this.getMatchcodes();
+        // this.getMatchcodes();
+        await this.loadMatchcodes(['MATI']);
+    }
+
+    loadMatchcodes(MC) {
+        return new Promise(async (resolve, reject) => {
+            let MATCHCODE = [];
+
+            for (let i = 0; i < MC.length; i++) {
+                let data = {
+                    GROUP_MANDT: "100",
+                    GROUP_MC: `GETB_MM_${MC[i]}`,
+                    GROUP_CBO: []
+                }
+
+                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`, data)
+                    .catch((err) => {
+                        console.log(err);
+                        return;
+                    });
+
+                if (res) {
+                    data = res.data;
+
+                    if (data.V_TYPE_MESSAGE !== 'E') {
+                        MATCHCODE = [...MATCHCODE, ...data["VSC_DATA"]];
+                    } else {
+                        alert('Error: ', data.MESSAGE);
+                        reject();
+                    }
+
+                } else {
+                    alert('Error de conexión con el servidor.');
+                    reject();
+                }
+            }
+
+            this.setState({
+                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE]
+            }, () => { this.forceUpdate() });
+
+            window.dispatchEvent(new CustomEvent('loadingScreen', { loading: false }));
+
+            resolve();
+        })
+
     }
 
     async getMatchcodes() {
-        let mcElements = [...document.getElementsByClassName('MC')];
+        let mcElements = [...document.getElementsByClassName('MC'), ...document.getElementsByClassName('comboMC')];
 
         let mcClasses = mcElements.map(f => { return (f.className.split(' ').find(x => x.startsWith('GECL')).substr(5, 4)) });
 
@@ -289,10 +338,10 @@ class Articulo extends React.Component {
             }
 
             this.setState({
-                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE],
-                loading: false
+                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE]
             });
-            
+
+            window.dispatchEvent(new CustomEvent('loadingScreen', { loading: false }));
         }
     }
 
@@ -357,7 +406,7 @@ class Articulo extends React.Component {
     changeSection(n) {
         this.setState({
             section: n
-        },()=>{this.getMatchcodes()})
+        }, () => { this.getMatchcodes() })
     }
     section1 = () => {
         return (
@@ -365,10 +414,14 @@ class Articulo extends React.Component {
                 <div className="d-flex justify-content-center align-items-center flex-column" style={{ width: "350px" }}>
                     <h1 className="h1 text-muted">Articulo</h1>
                     <Article class="d-flex justify-content-center p-2">
-                        <Field width="100%" label="Artículo" fieldClass="input-group" class="GECL_ARTI_MATNR" matchcode="GECL_CENT_BUKRS" />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MATNR"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_ARTI_MATNR" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
                     </Article>
                     <Article class="d-flex justify-content-center p-2">
-                        <DropDown width="100%" data={this.state.data} class="GECL_MATI_MATNR" />
+                        {
+                            this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_MATI')
+                                ? <DropDown width="100%" data={this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_MATI')["GETB_MM_MATI"]} class="GECL_MATI_MATNR" />
+                                : 'Cargando'
+                        }
                     </Article>
                     <Article class="d-flex justify-content-center p-4">
                         <input type="button" className="btn btn-success" value="Crear" onClick={() => { this.changeSection(2) }} />
@@ -462,7 +515,7 @@ class Articulo extends React.Component {
         this.setState({
             tab: t,
             tabTitle: e.target.value
-        },()=>{this.getMatchcodes()})
+        }, () => { this.getMatchcodes() })
     }
     renderTab(t) {
         switch (t) {
@@ -600,52 +653,52 @@ class Articulo extends React.Component {
 
                     <SubTitle title="Datos de Impuestos" />
                     <Table
-                    name="LST_GETB_MM_ARCF"
-                    validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARCF'))}
-                    data={this.state.JSON_DATA["LST_GETB_MM_ARCF"]}
-                    onChange={this.updateJSON.bind(this)}
-                    changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }}
-                    saveData={(table, data) => {
-                        this.setState({
-                            JSON_DATA: {
-                                ...this.state.JSON_DATA,
-                                [table]: data
-                            },
-                            modalType: ''
-                        })
-                    }}
-                    options={[
-                        {
-                            header: 'País',
-                            class: 'GECL_ARCF_ALAND',
-                            pk: true,
-                            matchcode: "GECL_PAIS_LAND1"
-                        }, {
-                            header: 'Tipo Impuesto',
-                            class: 'GECL_ARCF_TAXM1'
-                        }, {
-                            header: 'C',
-                            class: 'GECL_ARCF_TAXIM',
-                            matchcode: 'GECL_CLFI_TAXKM'
-                        }, {
-                            class: 'IND_TRANSC'
-                        }, {
-                            header: 'País',
-                            class: 'GECL_ARCF_ALAND',
-                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))).find(f => f.startsWith('GETB'))] : undefined,
-                            position: 0
-                        }, {
-                            header: 'Tipo Impuesto',
-                            class: 'GECL_ARCF_TAXM1',
-                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCF'))).find(f => f.startsWith('GETB'))] : undefined,
-                            position: 1
-                        }, {
-                            header: 'Clasificación Fiscal',
-                            class: 'GECL_ARCF_TAXIM',
-                            description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))).find(f => f.startsWith('GETB'))] : undefined,
-                            position: 2
-                        }
-                    ]} />
+                        name="LST_GETB_MM_ARCF"
+                        validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_ARCF'))}
+                        data={this.state.JSON_DATA["LST_GETB_MM_ARCF"]}
+                        onChange={this.updateJSON.bind(this)}
+                        changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }}
+                        saveData={(table, data) => {
+                            this.setState({
+                                JSON_DATA: {
+                                    ...this.state.JSON_DATA,
+                                    [table]: data
+                                },
+                                modalType: ''
+                            })
+                        }}
+                        options={[
+                            {
+                                header: 'País',
+                                class: 'GECL_ARCF_ALAND',
+                                pk: true,
+                                matchcode: "GECL_PAIS_LAND1"
+                            }, {
+                                header: 'Tipo Impuesto',
+                                class: 'GECL_ARCF_TAXM1'
+                            }, {
+                                header: 'C',
+                                class: 'GECL_ARCF_TAXIM',
+                                matchcode: 'GECL_CLFI_TAXKM'
+                            }, {
+                                class: 'IND_TRANSC'
+                            }, {
+                                header: 'País',
+                                class: 'GECL_ARCF_ALAND',
+                                description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_PAIS'))).find(f => f.startsWith('GETB'))] : undefined,
+                                position: 0
+                            }, {
+                                header: 'Tipo Impuesto',
+                                class: 'GECL_ARCF_TAXM1',
+                                description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCE')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCE'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_ARCE'))).find(f => f.startsWith('GETB'))] : undefined,
+                                position: 1
+                            }, {
+                                header: 'Clasificación Fiscal',
+                                class: 'GECL_ARCF_TAXIM',
+                                description: this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI')) ? this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))[Object.keys(this.state.MATCHCODE.find(x => x.TABLA.startsWith('MC_MM_CLFI'))).find(f => f.startsWith('GETB'))] : undefined,
+                                position: 2
+                            }
+                        ]} />
                 </Article>
             </Fragment>
         )
@@ -679,9 +732,9 @@ class Articulo extends React.Component {
         let value = e;
 
         if (this.state.tableIndex !== undefined) {
-            if(this.state.isModalActive){
+            if (this.state.isModalActive) {
                 this.state.lastInputFocused.value = value;
-            } else{
+            } else {
                 this.updateJSON(table, field, value, this.state.tableIndex);
                 this.setState({ tableIndex: undefined });
             }
@@ -689,7 +742,7 @@ class Articulo extends React.Component {
             this.updateJSON(table, field, value);
         }
 
-        if(this.state.isModalActive){
+        if (this.state.isModalActive) {
             window.dispatchEvent(new Event('mcChangeEvent'));
         }
     }
@@ -821,29 +874,31 @@ class Articulo extends React.Component {
     content = () => {
         return (
             <Fragment>
-                {this.state.section === 1 && this.section1()}
-                {this.state.section === 2 && this.section2()}
-                {this.state.section === 3 && this.section3()}
-                {this.state.section === 4 && this.section4()}
+                <div id="content" className="w-100 h-100 d-none">
+                    {this.state.section === 1 && this.section1()}
+                    {this.state.section === 2 && this.section2()}
+                    {this.state.section === 3 && this.section3()}
+                    {this.state.section === 4 && this.section4()}
 
-                <Modal modalType={this.state.modalType} data={this.state.selectedMatchcode} changeLastInput={(e) => { this.setSelectedModalValue(e) }}>
-                    {this.state.modalType === 'modal' && this.renderAditional()}
-                </Modal>
+                    <Modal modalType={this.state.modalType} data={this.state.selectedMatchcode} changeLastInput={(e) => { this.setSelectedModalValue(e) }}>
+                        {this.state.modalType === 'modal' && this.renderAditional()}
+                    </Modal>
+                </div>
             </Fragment>
         )
     }
 
     render() {
-        let msg = this.state.JSON_DATA["LST_GETB_MM_ARUM"][0]["GECL_ARUM_UMREN"];
-        // alert(msg);
-
         return (
             <Fragment>
-                <div style={{height:"100%",display:"none"}} className="loading w-100 d-flex justify-content-center align-items-center position-fixed bg-white">
-                    <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
-                </div>
                 {
-                    !this.state.loading && this.content()
+                    this.state.loading &&
+                    (<div style={{ height: "100%" }} className="loading w-100 d-flex justify-content-center align-items-center position-fixed bg-white">
+                        <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
+                    </div>)
+                }
+                {
+                    this.content()
                 }
             </Fragment>
         )
