@@ -699,28 +699,157 @@ class Articulo extends React.Component {
                                 position: 2
                             }
                         ]} />
+
+                    <SubTitle title="Acuerdos de cantidad" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_AUMNG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_AUMNG"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_LFMNG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_LFMNG"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                    </Article>
                 </Article>
             </Fragment>
         )
     }
     tab4 = () => {
         return (
-            <h1 className="h1">Organización Ventas 2</h1>
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_MATNR"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                    </Article>
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_VKORG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_VKORG"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_VTWEG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_VTWEG"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                    </Article>
+
+                    <SubTitle title="Conceptos de agrupación" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_VERSG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_VERSG"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GRES_STGMA" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MTPOS_MARA")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MTPOS_MARA"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_TIPO_MTPOS" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_PRODH")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_PRODH"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_KTGRM")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_KTGRM"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_GRIM_KTGRM" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_BONUS")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_BONUS"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_PMATN")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_PMATN"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_PROVG")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_PROVG"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARDV_MTPOS")} value={this.state.JSON_DATA["GETB_MM_ARDV"]["GECL_ARDV_MTPOS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_TIPO_MTPOS" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                    </Article>
+                </Article>
+            </Fragment>
         )
     }
     tab5 = () => {
         return (
-            <h1 className="h1">Com.ext.Importación</h1>
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_MATNR"]} onChange={this.updateJSON.bind(this)} disabled />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_WERKS")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_WERKS"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CENT_NAME1")} value={this.state.JSON_DATA["GETB_MM_CENT"]["GECL_CENT_NAME1"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                    </Article>
+
+                    <SubTitle title="Datos comercio exterior" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_STAWN")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_STAWN"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_CASNR")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_CASNR"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_MTVER")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_MTVER"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                    </Article>
+                </Article>
+            </Fragment>
         )
     }
     tab6 = () => {
         return (
-            <h1 className="h1">Ventas:Gnral./Centro</h1>
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_MATNR"]} onChange={this.updateJSON.bind(this)} disabled />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_WERKS")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_WERKS"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CENT_NAME1")} value={this.state.JSON_DATA["GETB_MM_CENT"]["GECL_CENT_NAME1"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                    </Article>
+
+                    <SubTitle title="Datos Generales" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_BRGEW")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_BRGEW"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_MTVFP")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_MTVFP"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_VEDI_MTVFP" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_NTGEW")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_NTGEW"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_GEWEI")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_GEWEI"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                    </Article>
+
+                    <SubTitle title="Parámetros Centros Generales" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_XMCNG")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_XMCNG"]} onChange={this.updateJSON.bind(this)} />
+                            <Field type="checkbox" validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_XCHPF")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_XCHPF"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_PRCTR")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_PRCTR"]} onChange={this.updateJSON.bind(this)} />
+                        </Article>
+                    </Article>
+                </Article>
+            </Fragment>
         )
     }
     tab7 = () => {
         return (
-            <h1 className="h1">Contabilidad 1</h1>
+            <Fragment>
+                <Article class="d-flex flex-wrap flex-column">
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARVA_MATNR")} value={this.state.JSON_DATA["GETB_MM_ARVA"]["GECL_ARVA_MATNR"]} onChange={this.updateJSON.bind(this)} disabled />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARCE_WERKS")} value={this.state.JSON_DATA["GETB_MM_ARCE"]["GECL_ARCE_WERKS"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} />
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CENT_NAME1")} value={this.state.JSON_DATA["GETB_MM_CENT"]["GECL_CENT_NAME1"]} onChange={this.updateJSON.bind(this)} disabled />
+                        </Article>
+                    </Article>
+
+                    <SubTitle title="Datos de valoración generales" />
+                    <Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_MEINS")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_MEINS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UMED_MSEHI" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                        <Article width="50%" class="d-flex flex-wrap flex-column">
+                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTI_SPART")} value={this.state.JSON_DATA["GETB_MM_ARTI"]["GECL_ARTI_SPART"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_SECO_SPART" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        </Article>
+                    </Article>
+                </Article>
+            </Fragment>
         )
     }
 
@@ -778,10 +907,10 @@ class Articulo extends React.Component {
                     <Article class="d-flex py-2">
                         <ul className="nav-tabs mb-1 d-flex" style={{ overflowX: "auto", overflowY: "hidden", listStyleType: "none" }}>
                             <li className="nav-item">
-                                <input type="button" className={this.state.modalTab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Unidades de medida" onClick={(e) => { this.setState({ modalTab: 1, modalTabTitle: e.target.value }, () => { this.forceUpdate() }) }} />
+                                <input type="button" className={this.state.modalTab === 1 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="Unidades de medida" onClick={(e) => { this.setState({ modalTab: 1, modalTabTitle: e.target.value }, () => { this.forceUpdate() }); e.target.click(); }} />
                             </li>
                             <li className="nav-item">
-                                <input type="button" className={this.state.modalTab === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="EANs adicionales" onClick={(e) => { this.setState({ modalTab: 2, modalTabTitle: e.target.value }, () => { this.forceUpdate() }) }} />
+                                <input type="button" className={this.state.modalTab === 2 ? 'nav-link btn-sm active' : 'nav-link btn-sm'} value="EANs adicionales" onClick={(e) => { this.setState({ modalTab: 2, modalTabTitle: e.target.value }, () => { this.forceUpdate() }); e.target.click(); }} />
                             </li>
                         </ul>
                     </Article>
@@ -864,9 +993,46 @@ class Articulo extends React.Component {
     modalTab2() {
         return (
             <Fragment>
-                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_AREM_MATNR")} value={this.state.JSON_DATA["GETB_MM_AREM"]["GECL_AREM_MATNR"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
-                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
-                <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                <Article class="d-flex flex-wrap flex-column">
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_AREM_MATNR")} value={this.state.JSON_DATA["GETB_MM_AREM"]["GECL_AREM_MATNR"]} onChange={this.updateJSON.bind(this)} disabled />
+                    <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_ARTB_MAKTX")} value={this.state.JSON_DATA["GETB_MM_ARTB"]["GECL_ARTB_MAKTX"]} onChange={this.updateJSON.bind(this)} />
+                </Article>
+
+                <SubTitle title="Datos de Valoración Generales" />
+                <Table actions
+                    name="LST_GETB_MM_AREM"
+                    validation={this.state.VALIDATION.filter(x => x.GECL_CAMP_NAME.startsWith('GECL_AREM'))}
+                    data={this.state.JSON_DATA["LST_GETB_MM_AREM"]}
+                    onChange={this.updateJSON.bind(this)}
+                    changeFocus={(lastInput, mcClass, index) => { this.renderMatchCode(lastInput, mcClass, index) }}
+                    saveData={(table, data) => {
+                        this.setState({
+                            JSON_DATA: {
+                                ...this.state.JSON_DATA,
+                                [table]: data
+                            },
+                            modalType: '',
+                            isModalActive: false
+                        })
+                    }}
+                    options={[
+                        {
+                            header: 'Unidad medida',
+                            class: 'GECL_AREM_MEINH',
+                            pk: true,
+                        }, {
+                            header: 'Ean Princip.',
+                            class: 'GECL_AREM_HPEAN'
+                        }, {
+                            header: 'Código EAN/UPC',
+                            class: 'GECL_AREM_EAN11'
+                        }, {
+                            header: 'Tipo EAN',
+                            class: 'GECL_AREM_EANTP',
+                        }, {
+                            class: 'IND_TRANSC'
+                        }
+                    ]} />
             </Fragment>
         )
     }

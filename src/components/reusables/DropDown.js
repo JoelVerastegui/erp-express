@@ -9,8 +9,6 @@ class DropDown extends React.Component {
             data: this.props.data !== undefined ? this.props.data : [],
             width: this.props.width !== undefined ? this.props.width : '100%'
         }
-
-        console.log('Constructor data: ',this.props.data);
     }
 
     componentWillReceiveProps(nextProps) {

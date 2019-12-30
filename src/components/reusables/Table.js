@@ -129,6 +129,13 @@ class Table extends React.Component {
     }
 
     componentWillReceiveProps() {
+        this.sortData(this.props.data);
+
+        if (JSON.stringify(this.props.options) !== JSON.stringify(this.state.options)) {
+            this.setState({
+                options: this.props.options
+            }, () => { this.forceUpdate() })
+        }
     }
 
     sortData(messyData) {
