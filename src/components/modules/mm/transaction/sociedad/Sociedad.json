@@ -1,0 +1,46 @@
+{
+    "GETB_MM_SOFI": {
+      "GECL_SOFI_BUKRS": "",
+      "GECL_SOFI_BUTXT": "",
+      "GECL_SOFI_ORT01": "",
+      "GECL_SOFI_LAND1": "",
+      "GECL_SOFI_WAERS": "",
+      "GECL_SOFI_SPRAS": "",
+      "GECL_SOFI_MANDT": "100",
+      "GECL_SOFI_CREADOPOR": "jtorres"
+    },
+    "GETB_MM_CEDI": {
+      "GECL_CEDI_TITLE": "",
+      "GECL_CEDI_NAME1": "",
+      "GECL_CEDI_NAME2": "",
+      "GECL_CEDI_NAME3": "",
+      "GECL_CEDI_NAME4": "",
+      "GECL_CEDI_SORT1": "",
+      "GECL_CEDI_SORT2": "",
+      "GECL_CEDI_STREET": "",
+      "GECL_CEDI_STREETCODE": "",
+      "GECL_CEDI_POST_CODE1": "",
+      "GECL_CEDI_CITY1": "",
+      "GECL_CEDI_COUNTRY": "",
+      "GECL_CEDI_REGION": "",
+      "GECL_CEDI_TIME_ZONE": "",
+      "GECL_CEDI_PO_BOX": "",
+      "GECL_CEDI_POST_CODE2": "",
+      "GECL_CEDI_POST_CODE3": "",
+      "GECL_CEDI_LANGU": null,
+      "GECL_CEDI_TEL_NUMBER": "",
+      "GECL_CEDI_TEL_EXTENS": "",
+      "GECL_CEDI_FAX_NUMBER": "",
+      "GECL_CEDI_FAX_EXTENS": "",
+      "GECL_CEDI_DEFLT_COMM": null,
+      "GECL_CEDI_EXTENSION1": "",
+      "GECL_CEDI_EXTENSION2": "",
+      "GECL_CEDI_ADDRNUMBER": ""
+    },
+    "GETB_MM_CECE": {
+      "GECL_CECE_SMTP_ADDR": ""
+    },
+    "INSTRUCTION": {
+      "IND_TRANSC": "I"
+    }
+  }

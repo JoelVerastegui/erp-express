@@ -316,7 +316,7 @@ class Table extends React.Component {
                             this.state.data.map((e, i) => {
                                 return (
                                     <tr key={i}>
-                                        <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }) }} /></td>
+                                        <td className="p-0"><input type="button" className="btn btn-secondary w-100" onClick={() => { this.state.selected === i ? this.setState({ selected: undefined }) : this.setState({ selected: i }); if(this.props.selected !== undefined){this.props.selected(this.state.selected === i ? undefined : i)} }} /></td>
                                         {
                                             Object.keys(e).map((f, ind) => {
                                                 return (<td key={ind}

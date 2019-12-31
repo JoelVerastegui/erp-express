@@ -202,6 +202,7 @@ class Articulo extends React.Component {
     }
 
     async componentDidMount() {
+        /* ===== VALIDATION ===== */
         let tables = Object.keys(this.state.JSON_DATA);
         tables = tables.map(e => { if (e.includes('GETB')) return e.substr(-12) });
         tables = tables.filter(x => x !== undefined);
@@ -216,8 +217,6 @@ class Articulo extends React.Component {
             }
         })
 
-
-        /* ===== VALIDATION ===== */
         let res = await axios.get(`http://${SERVER.IP}:${SERVER.PORT}/api/sys/listCAMP?lstgetb=${lstgetb}`)
             .catch((err) => {
                 console.log(err);
