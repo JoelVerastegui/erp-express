@@ -18,7 +18,27 @@ class Sociedad extends React.Component {
         this.state = {
             loading: true,
             selected: undefined,
+            modalTab: 0,
+            modalType: "",
+            selectedMatchcode: undefined,
             JSON_DATA: JSON_STRUCTURE,
+            MATCHCODE: [],
+            customDropDown: [
+                [
+                    {
+                        CODIGO: 'Sr',
+                        DESCRIPCION: 'Sr.'
+                    },
+                    {
+                        CODIGO: 'Sra',
+                        DESCRIPCION: 'Sra.'
+                    },
+                    {
+                        CODIGO: 'Empr',
+                        DESCRIPCION: 'Empresa'
+                    },
+                ]
+            ],
             VALIDATION: [],
             data: []
         }
@@ -71,7 +91,9 @@ class Sociedad extends React.Component {
                 this.setState({
                     VALIDATION: data,
                     loading: false
-                },()=>{this.forceUpdate()})
+                }, () => { this.forceUpdate() });
+
+                await this.loadMatchcodes(['IDIO', 'TCOM', 'PAIS', 'UHOR', 'MONE']);
             } else {
                 alert('Error: ', data.MESSAGE);
                 return;
@@ -81,6 +103,50 @@ class Sociedad extends React.Component {
             alert('Error de conexión con el servidor.');
             return;
         }
+    }
+
+    loadMatchcodes(MC) {
+        return new Promise(async (resolve, reject) => {
+            let MATCHCODE = [];
+
+            for (let i = 0; i < MC.length; i++) {
+                let data = {
+                    GROUP_MANDT: "100",
+                    GROUP_MC: `GETB_MM_${MC[i]}`,
+                    GROUP_CBO: []
+                }
+
+                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`, data)
+                    .catch((err) => {
+                        console.log(err);
+                        return;
+                    });
+
+                if (res) {
+                    data = res.data;
+
+                    if (data.V_TYPE_MESSAGE !== 'E') {
+                        MATCHCODE = [...MATCHCODE, ...data["VSC_DATA"]];
+                    } else {
+                        alert('Error: ', data.MESSAGE);
+                        reject();
+                    }
+
+                } else {
+                    alert('Error de conexión con el servidor.');
+                    reject();
+                }
+            }
+
+            this.setState({
+                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE]
+            }, () => { this.forceUpdate() });
+
+            // window.dispatchEvent(new CustomEvent('loadingScreen', { loading: false }));
+
+            resolve();
+        })
+
     }
 
     updateJSON(table, field, value, index) {
@@ -140,23 +206,154 @@ class Sociedad extends React.Component {
         }
     }
 
+    setSelectedModalValue(e) {
+        let field = this.state.lastInputFocused.className.split(' ').find(x => x.startsWith('GECL'));
+
+        let table = this.state.tableIndex !== undefined ? `LST_GETB_MM_${field.substr(5, 4)}` : `GETB_MM_${field.substr(5, 4)}`;
+
+        let value = e;
+
+        if (this.state.tableIndex !== undefined) {
+            if (this.state.isModalActive) {
+                this.state.lastInputFocused.value = value;
+            } else {
+                this.updateJSON(table, field, value, this.state.tableIndex);
+                this.setState({ tableIndex: undefined });
+            }
+        } else {
+            this.updateJSON(table, field, value);
+        }
+
+        // if (this.state.isModalActive) {
+        //     window.dispatchEvent(new Event('mcChangeEvent'));
+        // }
+    }
+
+    renderMatchCode(lastInput, mcClass, index = undefined) {
+        if (mcClass) {
+            let data = this.state.MATCHCODE.find(x => x.TABLA.substr(6, 4) === mcClass.substr(5, 4));
+
+            if (data !== undefined) {
+                let title = data["TITULO"];
+                let GETB = Object.keys(data).find(x => x.startsWith('GETB'));
+                data = data[GETB];
+
+                this.setState({
+                    lastInputFocused: lastInput,
+                    selectedMatchcode: {
+                        title,
+                        data
+                    },
+                    tableIndex: index,
+                    modalType: "matchcode"
+                }, () => { this.forceUpdate() })
+            }
+        }
+    }
+
     modalContent() {
         return (
             <Fragment>
-                <Article class="d-flex flex-wrap flex-column">
+                {/* Modal Tab 0 */}
+                <Article class={(this.state.modalTab === 0 ? 'd-flex' : 'd-none') + " flex-wrap flex-column"}>
                     <SubTitle title="Modificar Vista: Sociedad" />
-                    <Article width="auto" class="d-flex justify-content-end">
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle={this.state.selected !== undefined ? "" : "modal"} data-target="#modal2" value="Crear" onClick={() => { }} />
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-toggle={this.state.selected !== undefined ? "modal" : ""} value="Actualizar" />
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-toggle={this.state.selected !== undefined ? "modal" : ""} value="Detalle" />
+                    <Article width="auto" class="d-flex justify-content-start">
+                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle={this.state.selected !== undefined ? "" : "modal"} data-target="#modal2" value="Grabar" onClick={() => { }} />
+                        <input type="button" className="btn btn-info btn-sm mx-2" value="Cancelar" />
+                        <input type="button" className="btn btn-info btn-sm mx-2" value="Dirección" onClick={() => { this.setState({ modalTab: 1 }, () => { this.forceUpdate() }) }} />
                     </Article>
-                    <Article width="100%">
-                        <Article width="50%" class="d-flex flex-wrap flex-column">
-                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_BUKRS")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_BUKRS"]} onChange={this.updateJSON.bind(this)} />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_BUKRS")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_BUKRS"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_BUTXT")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_BUTXT"]} onChange={this.updateJSON.bind(this)} />
+                    </Article>
+
+                    <SubTitle title="Otros datos" />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_ORT01")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_ORT01"]} onChange={this.updateJSON.bind(this)} disabled />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_LAND1")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_LAND1"]} onChange={this.updateJSON.bind(this)} disabled />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_WAERS")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_WAERS"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_MONE_WAERS" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_SPRAS")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_SPRAS"]} onChange={this.updateJSON.bind(this)} disabled />
+                    </Article>
+                </Article>
+
+
+                {/* Modal Tab 1 */}
+                <Article class={(this.state.modalTab === 1 ? 'd-flex' : 'd-none') + " flex-wrap flex-column"}>
+                    <SubTitle title="Modificar Vista: Sociedad" />
+                    <Article width="auto" class="d-flex justify-content-start">
+                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle={this.state.selected !== undefined ? "" : "modal"} data-target="#modal2" value="Guardar" onClick={() => { }} />
+                        <input type="button" className="btn btn-info btn-sm mx-2" value="Cancelar" onClick={() => { this.setState({ modalTab: 0 }, () => { this.forceUpdate() }) }} />
+                    </Article>
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Article class="mt-2">
+                            <DropDown width="100%" data={this.state.customDropDown[0]} class="GECL_CEDI_TITLE" />
                         </Article>
-                        <Article width="50%" class="d-flex flex-wrap flex-column">
-                            <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_SOFI_BUTXT")} value={this.state.JSON_DATA["GETB_MM_SOFI"]["GECL_SOFI_BUTXT"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME1"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME2"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME3")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME3"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME4")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME4"]} onChange={this.updateJSON.bind(this)} />
+                    </Article>
+
+                    <SubTitle title="Conceptos búsqueda" />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_SORT1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_SORT1"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_SORT2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_SORT2"]} onChange={this.updateJSON.bind(this)} />
+                    </Article>
+
+                    <SubTitle title="Dirección" />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_STREET")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_STREET"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_STREETCODE")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_STREETCODE"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_POST_CODE1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_POST_CODE1"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_CITY1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_CITY1"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_COUNTRY")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_COUNTRY"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_PAIS_LAND1" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }}
+                            onEnter={(event) => {
+                                const target = event.target;
+                                const MC_MM_PAIS = this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_PAIS');
+
+                                if (MC_MM_PAIS && target) {
+                                    const reg = MC_MM_PAIS["GETB_MM_PAIS"].find(x => x.CODIGO.trim() === target.value.trim());
+
+                                    if(reg !== undefined){
+                                        event.target.disabled = true;
+                                        event.target.parentElement.querySelector('.MC').disabled = true;
+    
+                                        document.getElementsByClassName('GECL_CEDI_REGION')[0].focus();
+                                        document.getElementsByClassName('GECL_CEDI_REGION')[0].disabled = false;
+                                        document.getElementsByClassName('GECL_CEDI_REGION')[0].parentElement.querySelector('.MC').disabled = false;
+                                    } else{
+                                        event.stopPropagation();
+                                        console.log('El código de país ingresado es inválido.');
+                                        
+                                    }
+                                }
+                            }} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_REGION")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_REGION"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_REGI_BLAND" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} disabled />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_TIME_ZONE")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_TIME_ZONE"]} onChange={this.updateJSON.bind(this)} matchcode="GECL_UHOR_TZONE" changeFocus={(lastInput, mcClass) => { this.renderMatchCode(lastInput, mcClass) }} />
+                    </Article>
+
+                    <SubTitle title="Apartado correos" />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_PO_BOX")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_PO_BOX"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_POST_CODE2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_POST_CODE2"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_POST_CODE3")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_POST_CODE3"]} onChange={this.updateJSON.bind(this)} />
+                    </Article>
+
+                    <SubTitle title="Comunicación" />
+                    <Article width="100%" class="d-flex flex-wrap flex-column">
+                        <Article class="mt-2">
+                            <DropDown width="100%" data={this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_IDIO') !== undefined ? this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_IDIO')["GECL_IDIO_SPRAS"] : undefined} class="GECL_CEDI_LANGU" />
                         </Article>
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_TEL_NUMBER")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_TEL_NUMBER"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_TEL_EXTENS")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_TEL_EXTENS"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_FAX_NUMBER")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_FAX_NUMBER"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_FAX_EXTENS")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_FAX_EXTENS"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CECE_SMTP_ADDR")} value={this.state.JSON_DATA["GETB_MM_CECE"]["GECL_CECE_SMTP_ADDR"]} onChange={this.updateJSON.bind(this)} />
+                        <Article class="mt-2">
+                            <DropDown width="100%" data={this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_TCOM') !== undefined ? this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_TCOM')["GECL_TCOM_COMM_TYPE"] : undefined} class="GECL_CEDI_DEFLT_COMM" />
+                        </Article>
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_EXTENSION1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_EXTENSION1"]} onChange={this.updateJSON.bind(this)} />
+                        <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_EXTENSION2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_EXTENSION2"]} onChange={this.updateJSON.bind(this)} />
                     </Article>
                 </Article>
             </Fragment>
@@ -191,7 +388,7 @@ class Sociedad extends React.Component {
                         ]} />
                 </div>
 
-                <Modal modalType="modal" data={undefined} changeLastInput={(e) => { this.setSelectedModalValue(e) }}>
+                <Modal modalType={this.state.modalType} data={this.state.selectedMatchcode} changeLastInput={(e) => { this.setSelectedModalValue(e) }}>
                     {this.modalContent()}
                 </Modal>
             </Fragment>

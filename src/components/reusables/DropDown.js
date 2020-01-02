@@ -13,7 +13,7 @@ class DropDown extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.data !== undefined) {
-            this.setState({ data: nextProps.data, renderItem: 1 });
+            this.setState({ data: nextProps.data, renderItem: 1 },()=>{this.forceUpdate()});
         }
     }
 

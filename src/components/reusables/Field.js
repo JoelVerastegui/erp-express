@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 function Field(props) {
     let validation = props.validation !== undefined ? props.validation : '';
@@ -12,6 +12,45 @@ function Field(props) {
     let matchcode = props.matchcode !== undefined ? props.matchcode : '';
     let width = props.width !== undefined ? props.width : '';
     let isDisabled = props.disabled !== undefined ? true : false;
+    let keyFired = false;
+
+    // useEffect(()=>{
+    //     if(validation !== undefined && validation !== ''){
+    //         document.getElementsByClassName(validation["GECL_CAMP_NAME"])[0].addEventListener('keyup',(e)=>{
+    //             // ENTER
+    //             if(e.which === 13){
+    //                 if(props.onEnter !== undefined && !keyFired){
+    //                     e.preventDefault();
+    //                     e.stopPropagation();
+    //                     props.onEnter(e);
+    //                     keyFired = true;
+    //                     setTimeout(() => {
+    //                         keyFired = false;
+    //                     }, 2000);
+    //                 }
+    //             }
+    //         },false)
+    //     }
+    // })    
+
+    window.addEventListener('keyup', (e) => {
+        if (validation !== undefined && validation !== '') {
+
+            // ENTER
+            if (e.which === 13 && e.target.className === validation["GECL_CAMP_NAME"]) {
+                if (props.onEnter !== undefined && !keyFired) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onEnter(e);
+                    keyFired = true;
+                    setTimeout(() => {
+                        keyFired = false;
+                    }, 2000);
+                }
+            }
+        }
+
+    }, false)
 
     function onFieldChange(event) {
         // for a regular input field, read field name and value from the event
@@ -127,15 +166,15 @@ function Field(props) {
                             {
                                 matchcode !== '' &&
                                 <div className="input-group-append">
-                                    <input type="button" 
-                                           className={matchcode + " MC btn btn-outline-secondary"} 
-                                           value="MC" 
-                                           onClick={(e) => {props.changeFocus(e.target.parentElement.previousSibling,e.target.className.split(' ').find(x => x.startsWith('GECL')))}} 
-                                           data-backdrop="static" 
-                                           data-keyboard="false" 
-                                           data-toggle="modal" 
-                                           data-target="#modal"
-                                           data-dismiss="modal" />
+                                    <input type="button"
+                                        className={matchcode + " MC btn btn-outline-secondary"}
+                                        value="MC"
+                                        onClick={(e) => { props.changeFocus(e.target.parentElement.previousSibling, e.target.className.split(' ').find(x => x.startsWith('GECL'))) }}
+                                        data-backdrop="static"
+                                        data-keyboard="false"
+                                        data-toggle="modal"
+                                        data-target="#modal"
+                                        disabled={isDisabled} />
                                 </div>
                             }
                         </div>
