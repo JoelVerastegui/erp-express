@@ -139,7 +139,8 @@ class Sociedad extends React.Component {
             }
 
             this.setState({
-                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE]
+                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE],
+                loading: false
             }, () => { this.forceUpdate() });
 
             // window.dispatchEvent(new CustomEvent('loadingScreen', { loading: false }));
@@ -281,12 +282,11 @@ class Sociedad extends React.Component {
                 <Article class={(this.state.modalTab === 1 ? 'd-flex' : 'd-none') + " flex-wrap flex-column"}>
                     <SubTitle title="Modificar Vista: Sociedad" />
                     <Article width="auto" class="d-flex justify-content-start">
-                        <input type="button" className="btn btn-info btn-sm mx-2" data-backdrop="static" data-keyboard="false" data-toggle={this.state.selected !== undefined ? "" : "modal"} data-target="#modal2" value="Guardar" onClick={() => { }} />
-                        <input type="button" className="btn btn-info btn-sm mx-2" value="Cancelar" onClick={() => { this.setState({ modalTab: 0 }, () => { this.forceUpdate() }) }} />
+                        <input type="button" className="btn btn-info btn-sm mx-2" value="Volver" onClick={() => { this.setState({ modalTab: 0 }, () => { this.forceUpdate() }) }} />
                     </Article>
                     <Article width="100%" class="d-flex flex-wrap flex-column">
                         <Article class="mt-2">
-                            <DropDown width="100%" data={this.state.customDropDown[0]} class="GECL_CEDI_TITLE" />
+                            <DropDown width="100%" data={this.state.customDropDown[0]} class="GECL_CEDI_TITLE" onChange={this.updateJSON.bind(this)} />
                         </Article>
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME1"]} onChange={this.updateJSON.bind(this)} />
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_NAME2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_NAME2"]} onChange={this.updateJSON.bind(this)} />
@@ -321,10 +321,11 @@ class Sociedad extends React.Component {
                                         document.getElementsByClassName('GECL_CEDI_REGION')[0].focus();
                                         document.getElementsByClassName('GECL_CEDI_REGION')[0].disabled = false;
                                         document.getElementsByClassName('GECL_CEDI_REGION')[0].parentElement.querySelector('.MC').disabled = false;
+
+                                        this.setState({loading:true});
+                                        this.loadMatchcodes(['REGI']);
                                     } else{
-                                        event.stopPropagation();
-                                        console.log('El código de país ingresado es inválido.');
-                                        
+                                        window.dispatchEvent(new CustomEvent('showMessage', { detail: {message:'El código de país ingresado es inválido.',type:'danger'} }));                                        
                                     }
                                 }
                             }} />
@@ -342,7 +343,7 @@ class Sociedad extends React.Component {
                     <SubTitle title="Comunicación" />
                     <Article width="100%" class="d-flex flex-wrap flex-column">
                         <Article class="mt-2">
-                            <DropDown width="100%" data={this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_IDIO') !== undefined ? this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_IDIO')["GECL_IDIO_SPRAS"] : undefined} class="GECL_CEDI_LANGU" />
+                            <DropDown width="100%" class="GECL_CEDI_LANGU" name="GECL_IDIO_SPRAS" onChange={this.updateJSON.bind(this)} />
                         </Article>
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_TEL_NUMBER")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_TEL_NUMBER"]} onChange={this.updateJSON.bind(this)} />
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_TEL_EXTENS")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_TEL_EXTENS"]} onChange={this.updateJSON.bind(this)} />
@@ -350,7 +351,7 @@ class Sociedad extends React.Component {
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_FAX_EXTENS")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_FAX_EXTENS"]} onChange={this.updateJSON.bind(this)} />
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CECE_SMTP_ADDR")} value={this.state.JSON_DATA["GETB_MM_CECE"]["GECL_CECE_SMTP_ADDR"]} onChange={this.updateJSON.bind(this)} />
                         <Article class="mt-2">
-                            <DropDown width="100%" data={this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_TCOM') !== undefined ? this.state.MATCHCODE.find(x => x.TABLA === 'MC_MM_TCOM')["GECL_TCOM_COMM_TYPE"] : undefined} class="GECL_CEDI_DEFLT_COMM" />
+                            <DropDown width="100%" class="GECL_CEDI_DEFLT_COMM" name="GECL_TCOM_COMM_TYPE" onChange={this.updateJSON.bind(this)} />
                         </Article>
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_EXTENSION1")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_EXTENSION1"]} onChange={this.updateJSON.bind(this)} />
                         <Field validation={this.state.VALIDATION.find(x => x.GECL_CAMP_NAME === "GECL_CEDI_EXTENSION2")} value={this.state.JSON_DATA["GETB_MM_CEDI"]["GECL_CEDI_EXTENSION2"]} onChange={this.updateJSON.bind(this)} />
@@ -400,7 +401,7 @@ class Sociedad extends React.Component {
             <Fragment>
                 {
                     this.state.loading &&
-                    (<div style={{ height: "100%" }} className="loading w-100 d-flex justify-content-center align-items-center position-fixed bg-white">
+                    (<div style={{ height: "100%", zIndex:'1060', top:'0' }} className="loading w-100 d-flex justify-content-center align-items-center position-fixed bg-white">
                         <img style={{ width: "300px", height: "160px" }} src={"https://i.pinimg.com/originals/46/18/55/461855b29ae2060f319f225529145f7c.gif"} alt="loading" />
                     </div>)
                 }

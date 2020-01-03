@@ -168,7 +168,7 @@ class Modal extends React.Component {
     modalContent(){
         return(
             <Fragment>
-                <div className="modal fade" id="modal2" tabIndex="-1" role="dialog">
+                <div className="modal fade" id="modal2" tabIndex="-1" role="dialog" style={{overflowY:'auto'}}>
                     <div className={"modal-dialog modal-dialog-centered modal-lg"} role="document">
                         {
                             this.state.loading ? (

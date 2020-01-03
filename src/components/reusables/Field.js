@@ -34,22 +34,12 @@ function Field(props) {
     // })    
 
     window.addEventListener('keyup', (e) => {
-        if (validation !== undefined && validation !== '') {
-
             // ENTER
-            if (e.which === 13 && e.target.className === validation["GECL_CAMP_NAME"]) {
-                if (props.onEnter !== undefined && !keyFired) {
-                    e.preventDefault();
-                    e.stopPropagation();
+            if (e.which === 13 /*&& e.target.className === validation["GECL_CAMP_NAME"]*/) {
+                if (props.onEnter !== undefined) {
                     props.onEnter(e);
-                    keyFired = true;
-                    setTimeout(() => {
-                        keyFired = false;
-                    }, 2000);
                 }
             }
-        }
-
     }, false)
 
     function onFieldChange(event) {
