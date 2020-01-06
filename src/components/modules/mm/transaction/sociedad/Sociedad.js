@@ -105,18 +105,28 @@ class Sociedad extends React.Component {
         }
     }
 
-    loadMatchcodes(MC) {
+    loadMatchcodes(MC,GROUP_FILT1 = '',GROUP_FILT2 = '',GROUP_FILT3 = '',GROUP_FILTEQU1 = '') {
         return new Promise(async (resolve, reject) => {
-            let MATCHCODE = [];
+            let MATCHCODE = this.state.MATCHCODE;
 
             for (let i = 0; i < MC.length; i++) {
+                let method = 'findMC';
+
                 let data = {
                     GROUP_MANDT: "100",
                     GROUP_MC: `GETB_MM_${MC[i]}`,
                     GROUP_CBO: []
                 }
 
-                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/findMC`, data)
+                if(GROUP_FILT1 !== '' || GROUP_FILT2 !== '' || GROUP_FILT3 !== '' || GROUP_FILTEQU1 !== ''){
+                    data["GROUP_FILT1"] = GROUP_FILT1;
+                    data["GROUP_FILT2"] = GROUP_FILT2;
+                    data["GROUP_FILT3"] = GROUP_FILT3;
+                    data["GROUP_FILTEQU1"] = GROUP_FILTEQU1;
+                    method += 'F';
+                }
+
+                let res = await axios.post(`http://${SERVER.IP}:${SERVER.PORT}/api/mm/${method}`, data)
                     .catch((err) => {
                         console.log(err);
                         return;
@@ -139,15 +149,12 @@ class Sociedad extends React.Component {
             }
 
             this.setState({
-                MATCHCODE: [...this.state.MATCHCODE, ...MATCHCODE],
+                MATCHCODE,
                 loading: false
             }, () => { this.forceUpdate() });
 
-            // window.dispatchEvent(new CustomEvent('loadingScreen', { loading: false }));
-
             resolve();
         })
-
     }
 
     updateJSON(table, field, value, index) {
@@ -315,15 +322,15 @@ class Sociedad extends React.Component {
                                     const reg = MC_MM_PAIS["GETB_MM_PAIS"].find(x => x.CODIGO.trim() === target.value.trim());
 
                                     if(reg !== undefined){
-                                        event.target.disabled = true;
-                                        event.target.parentElement.querySelector('.MC').disabled = true;
+                                        target.disabled = true;
+                                        target.parentElement.querySelector('.MC').disabled = true;
     
-                                        document.getElementsByClassName('GECL_CEDI_REGION')[0].focus();
                                         document.getElementsByClassName('GECL_CEDI_REGION')[0].disabled = false;
                                         document.getElementsByClassName('GECL_CEDI_REGION')[0].parentElement.querySelector('.MC').disabled = false;
+                                        document.getElementsByClassName('GECL_CEDI_REGION')[0].focus();
 
                                         this.setState({loading:true});
-                                        this.loadMatchcodes(['REGI']);
+                                        this.loadMatchcodes(['REGI'],target.value);
                                     } else{
                                         window.dispatchEvent(new CustomEvent('showMessage', { detail: {message:'El código de país ingresado es inválido.',type:'danger'} }));                                        
                                     }
