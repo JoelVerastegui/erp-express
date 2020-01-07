@@ -115,7 +115,7 @@ function DropDown(props) {
             <small className="m-0 text-nowrap text-truncate font-weight-bold" style={{ width: "250px" }}>{label}</small>
             <select className={_class + " comboMC selectpicker show-tick mx-2"} data-show-subtext="true" data-size="5" data-live-search="true" data-width={'300px'}
                     onChange={(e)=>{props.onChange(`GETB_MM_${_class.substr(5,4)}`,_class,e.target.options[e.target.selectedIndex].dataset.subtext)}}>
-                <option key="" data-subtext="">--- Seleccionar ---</option>
+                <option className="dropdown-item" key="" data-subtext="">--- Seleccionar ---</option>
                 {data.map((element, i) => {
                     return (<option key={i} data-subtext={element.CODIGO}>{element.DESCRIPCION}</option>)
                 })}
